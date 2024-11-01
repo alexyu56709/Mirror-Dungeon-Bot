@@ -28,7 +28,7 @@
 ### Setup Instructions:
 
 1. **Team Setup:** 
-   - ChargeGrinder is currently tested with an Uptie 3 charge team.
+   - ChargeGrinder is currently tested with an Uptie 3-4 charge team.
    ![team.png](team.png)
    - Required EGO:
      - Yi Sang's *Crow's Eye View*
