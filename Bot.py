@@ -32,6 +32,7 @@ def locateAll(imagefullpath, conf):
     try:
         p = Box(0, 0, 0, 0)
         posit = pyautogui.locateAllOnScreen(imagefullpath, confidence=conf, grayscale=False)
+        posit = sorted(posit, key=lambda box: box[0])
         for pos in posit:
             if abs(pos[0] - p[0]) > threshhold \
             or abs(pos[1] - p[1]) > threshhold:
@@ -57,14 +58,10 @@ def pause():
 
 # just heal
 def shop():
-    pyautogui.click(1156, 316) # heal for 100
+    UIconfirm("shop.png", 0.8) # heal for 100
     time.sleep(0.5)
-    if pyautogui.pixelMatchesColor(1089, 500, (235, 201, 159), tolerance=10):
-        pyautogui.click(1400, 500) # all heal
-    else:
-        pyautogui.click(1400, 677) # no heal
+    pyautogui.click(1400, 500) # all heal
     time.sleep(2)
-    clickonskip()
     pyautogui.click(1793, 914) # press continue
     time.sleep(0.3)
     pyautogui.click(1793, 914) # and Leave
@@ -72,24 +69,6 @@ def shop():
     pyautogui.click(1144, 738) # confirm
     time.sleep(3)
     # get money from screen
-
-
-# just autorest I am too lazy to look into this deeper
-def rest():
-    pyautogui.click(1280, 371) # we assume that we have money (not having money sucks)
-    time.sleep(0.5)
-    if pyautogui.pixelMatchesColor(1089, 500, (235, 201, 159), tolerance=10):
-        pyautogui.click(1400, 500) # all heal
-    else:
-        pyautogui.click(1400, 677) # no heal
-    time.sleep(2)
-    clickonskip()
-    pyautogui.click(1793, 914) # press continue
-    time.sleep(0.3)
-    pyautogui.click(1793, 914) # and Leave
-    time.sleep(0.7)
-    pyautogui.click(1144, 738) # confirm
-    time.sleep(3)
 
 
 def pthenenter():
@@ -137,18 +116,14 @@ def getevent() -> bool:
     if UIconfirm("TOBATTLE.png", conf=0.8):
         time.sleep(10)
         mainfight()
+    elif UIcheck("shop.png", conf=0.8):
+        print("SHOP")
+        shop()
     else:
         if UIcheck("eventskip.png", conf=0.8):
             clickonskip()
             clickonskip()
-            if UIcheck("shop.png", conf=0.8):
-                print("SHOP")
-                shop()
-            elif UIcheck("rest.png", conf=0.8):
-                print("RESTSHOP")
-                rest()
-            else:
-                doevent()
+            doevent()
         else:
             return False
     return True
@@ -225,7 +200,7 @@ def eventend() -> bool:
 def encounterreward() -> bool:
     try:
         pyautogui.locateOnScreen(f"{UIpath}encounterreward.png", confidence=.8)
-        pyautogui.screenshot(f"choice/{int(time.time())}.png")
+        # pyautogui.screenshot(f"choice/{int(time.time())}.png") # debug stuff
         time.sleep(0.7)
         pyautogui.click(869, 494)
         time.sleep(.3)
@@ -243,8 +218,8 @@ def grabEGO() -> bool:
     try:
         pyautogui.locateOnScreen(f"{UIpath}EGObin.png", region=(80, 40, 177, 143), confidence=0.9)
         print("GIFT FOUND")
-        pyautogui.screenshot(f"choice/{int(time.time())}.png")
-        #try: check for mounting trials
+        # pyautogui.screenshot(f"choice/{int(time.time())}.png") # debugging
+        #try: check for ego gifts
         pyautogui.click(950, 540)
         time.sleep(2)
         pyautogui.click(1700,865)
@@ -260,10 +235,10 @@ def grabEGO() -> bool:
 def isPack(): # def to recognize that we are in pack choice event
     print("pack choice?")
     try:
-        pyautogui.locateOnScreen(f"{UIpath}PackChoice.png", region=(1733, 234, 164, 154), confidence=0.9)
+        pyautogui.locateOnScreen(f"{UIpath}PackChoice.png", region=(1733, 117, 164, 154), confidence=0.9)
 
-        img = pyautogui.screenshot()
-        img.save(f"stages/{int(time.time())}.png")
+        # img = pyautogui.screenshot() # for debugging purposes
+        # img.save(f"stages/{int(time.time())}.png") 
 
         return True
     except pyautogui.ImageNotFoundException:
@@ -289,18 +264,21 @@ def blacklist(offset):
 def PackChoice(): # def to choose the next level
     if isPack() == False:
         return
-    for i in range(5): # 5 cards
+    time.sleep(1)
+    card_count = len(locateAll(f"{UIpath}PackCard.png", 0.7)) # I expect value 3-5 but don't check for now
+    offset0 = (5 - card_count)*161
+    for i in range(card_count):
         time.sleep(1)
         offset = 322 * i
-        pyautogui.moveTo(416 + offset, 421)
-        if i == 4:
+        pyautogui.moveTo(416 + offset + offset0, 421)
+        if i == card_count - 1:
             clickDrag()
             break
         try:
-            pyautogui.locateOnScreen(f"{UIpath}warning.png", region=(228 + offset, 311, 188, 110), confidence=0.7)
+            pyautogui.locateOnScreen(f"{UIpath}warning.png", region=(228 + offset + offset0, 311, 188, 110), confidence=0.7)
             continue
         except pyautogui.ImageNotFoundException:
-            if blacklist(offset) == True:
+            if blacklist(offset + offset0) == True:
                 continue
             else:
                 clickDrag()
@@ -351,7 +329,7 @@ def isAbno():
             pyautogui.locateOnScreen(part, confidence=0.7)
             print("part located")
 
-            pyautogui.screenshot(f"abnos/{int(time.time())}.png")
+            # pyautogui.screenshot(f"abnos/{int(time.time())}.png") # for debugging
 
             if part[:26] == bodypath and locateBody() == False:
                 raise pyautogui.ImageNotFoundException
@@ -365,7 +343,7 @@ def isAbno():
 def egoSpam():
     print("ego")
     TurboSpam = False
-    if UIcheck('stagger.png', 0.6, (524, 914, 762, 126)) == True:
+    if UIcheck('stagger.png', 0.6, (524, 914, 762, 126)):
         TurboSpam = True
 
     for i in range(6):
@@ -398,7 +376,9 @@ def egoSpam():
 
 
 def mainbot():  # the main loop for the bot
-    time.sleep(7)
+    time.sleep(5)
+    if UIcheck("hardDifficulty.png", 0.7): # Change to Easy Dungeon
+        UIconfirm("hardDifficulty.png", 0.8)
     error = 0
     while True:
         pause()
@@ -408,7 +388,7 @@ def mainbot():  # the main loop for the bot
         eventck = getevent()
         fightck = mainfight()
         egock = grabEGO()
-        if UIcheck('victory.png', 0.9, (1035, 734, 265, 125)):
+        if UIcheck('victory.png', 0.9, (1478, 143, 296, 116)):
             break
         if not moveck and \
            not fightck and \
@@ -416,7 +396,7 @@ def mainbot():  # the main loop for the bot
            not egock:
             error += 1
         if error > 20:
-            pyautogui.screenshot(f"errors/{int(time.time())}.png")
+            # pyautogui.screenshot(f"errors/{int(time.time())}.png") # also debugging
             window = pyautogui.getActiveWindowTitle()
             if window == 'LimbusCompany':
                 pyautogui.hotkey('alt', 'f4')
@@ -428,8 +408,8 @@ def egoFirst(): # def to choose first ego, too lazy to make it more "smart"
     time.sleep(3)
     pyautogui.click(766, 667) # Charge ego
     time.sleep(1)
-    pyautogui.click(1458, 396) # First and second
-    pyautogui.click(1458, 547)
+    pyautogui.click(1458, 396) # First
+    # pyautogui.click(1458, 547)
     time.sleep(1)
     pyautogui.click(1621, 879) # Enter
 
@@ -442,11 +422,17 @@ def initMirror():
         if UIcheck("Inferno.png", 0.8):
             pyautogui.click(671, 460) # Mirror dungeons
         time.sleep(2)
-        UIconfirm("Easy.png", 0.8) # Easy mirror
+        UIconfirm("Start.png", 0.8) # Enter
         time.sleep(1)
-        UIconfirm("Start.png", 0.8)
+        UIconfirm("enterInvert.png", 0.8)
+        time.sleep(3)
+        pyautogui.click(1719, 879) # Default team
+        time.sleep(3)
+        UIconfirm("enterBonus.png", 0.8)
         time.sleep(1)
         UIconfirm("EGOconfirm.png", 0.8)
+        time.sleep(1)
+
         egoFirst()
 
         time.sleep(3)
