@@ -1,5 +1,5 @@
 # ChargeGrinder
-**ChargeGrinder** is a bot for MD5 grinding in Limbus Company, tested on Easy Mirror (Wuthering difficulty).
+**ChargeGrinder** is a bot for MD5 grinding in Limbus Company, tested on Easy Mirror.
 
 ### Features:
 - **Automated Mirror Dungeon Runs:** ChargeGrinder will automatically complete all floors of the Mirror Dungeon.
