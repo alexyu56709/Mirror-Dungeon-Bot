@@ -287,15 +287,16 @@ def PackChoice(): # def to choose the next level
 
 
 def claimRewards():
-    pyautogui.click(1667, 855)
+    pyautogui.click(1667, 855) # Victory screen confirm
     time.sleep(1)
-    pyautogui.click(1667, 855)
+    pyautogui.click(1667, 855) # Claim rewards
     time.sleep(2)
-    pyautogui.click(1274, 812)
+    pyautogui.click(1274, 812) # Spend enkephalin
     time.sleep(2)
-    pyautogui.click(1156, 724)
-    time.sleep(10)
-    pyautogui.click(966, 690)
+    pyautogui.click(1156, 724) # Are you sure? button
+
+    while UIconfirm("EGOconfirm.png", 0.8): # Confirming rewards
+        time.sleep(2)
     time.sleep(10)
 
 
