@@ -59,7 +59,7 @@ def dungeon_start():
     except RuntimeError:
         print("Initialization error")
         logging.error("Initialization error")
-        gui.screenshot(f"errors/init{int(time.time())}.png") # debugging
+        # gui.screenshot(f"errors/init{int(time.time())}.png") # debugging
         # close_limbus()
 
     print("Entering MD!")
@@ -84,7 +84,7 @@ def dungeon_end():
     except RuntimeError:
         print("Termination error")
         logging.error("Termination error")
-        gui.screenshot(f"errors/end{int(time.time())}.png") # debugging
+        # gui.screenshot(f"errors/end{int(time.time())}.png") # debugging
         # close_limbus()
 
     print("MD Finished!")
@@ -123,7 +123,7 @@ def main_loop():
         ck += shop(level, buy)
 
         if not ck:
-            error += 0
+            error += 1 
 
         if error > 20:
             logging.error('We are stuck')

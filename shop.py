@@ -333,7 +333,3 @@ def shop(level, to_buy):
 
     check(button="path/Move.png", region=(1805, 107, 84, 86), error=True)
     return True
-
-
-# shop(2, ["glimpseShop.png", "dustShop.png", "stewShop.png", "paraffinShop.png", "ashShop.png"])
-# enhance_glimpse()
