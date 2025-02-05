@@ -16,9 +16,10 @@ def dungeon_start():
 
         check(button="start/enterInvert.png", region=(943, 669, 382, 106), click=True, error=True)
         gui.moveTo(1726, 978)
-        gui.click(duration=0.1)
-        time.sleep(0.1)
-        check(button="start/ConfirmTeam.png", region=(1593, 830, 234, 90), click=True, error=True)
+        gui.click()
+        if check(button="start/ConfirmTeam.png", region=(1593, 830, 234, 90), error=True):
+            time.sleep(0.2)
+            gui.click(1717, 878, duration=0.1)
 
         # Bonus Choice:
 
@@ -125,7 +126,7 @@ def main_loop():
         if not ck:
             error += 1 
 
-        if error > 20:
+        if error > 1000:
             logging.error('We are stuck')
             gui.screenshot(f"errors/stuck{int(time.time())}.png") # debugging
             close_limbus()

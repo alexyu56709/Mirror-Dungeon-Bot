@@ -24,26 +24,30 @@ def grab_EGO():
     ego = [val for i, val in enumerate(ego) if i not in remove]
 
     if len(ego) == 1:
-        time.sleep(0.1)
-        gui.click(ego[0], duration=0.1)
+        time.sleep(0.2)
+        gui.moveTo(ego[0], duration=0.1)
+        gui.click(duration=0.1)
     elif len(ego) > 1:
         weights = [0]*len(ego)
         for i in range(len(ego)):
             for lvl in range(4, 0, -1):
                 try:
-                    locateOnScreenRGBA(f"{lvl}.png", region=(ego[i][0] - 106, ego[i][1] - 101, 66, 59), confidence=0.7, grayscale=False, path=EGO_PATH)
+                    locateOnScreenRGBA(f"{lvl}.png", region=(int(ego[i][0] - 106), int(ego[i][1] - 101), 66, 59), confidence=0.7, grayscale=False, path=EGO_PATH)
                     weights[i] = lvl
                     break
                 except gui.ImageNotFoundException:
                     continue
         index_max = max(range(len(weights)), key=weights.__getitem__)
-        gui.click(ego[index_max], duration=0.1)
+        time.sleep(0.2)
+        gui.moveTo(ego[index_max], duration=0.1)
+        gui.click(duration=0.1)
     else:
         for lvl in range(4, 0, -1):
             try:
                 res = locateOnScreenRGBA(f"{lvl}.png", region=(0, 309, 1920, 110), confidence=0.8, grayscale=False, path=EGO_PATH)
-                time.sleep(0.1)
-                gui.click(gui.center(res), duration=0.1)
+                time.sleep(0.2)
+                gui.moveTo(gui.center(res), duration=0.1)
+                gui.click(duration=0.1)
                 break
             except gui.ImageNotFoundException:
                 continue

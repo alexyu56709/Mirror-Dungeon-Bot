@@ -55,8 +55,9 @@ def fight():
         if check(button='event/eventskip.png', region=(850, 437, 103, 52), skip_wait=True):
             event()
 
-        if check(button='loading.png', region=(1577, 408, 302, 91), skip_wait=True) or \
+        if check(button='loading.png', region=(1577, 408, 302, 91), skip_wait=True)  or \
            check(button='path/Move.png', region=(1805, 107, 84, 86), skip_wait=True) or \
+           check("grab/EGObin.png", region=(69, 31, 123, 120), skip_wait=True)       or \
            check("grab/encounterreward.png", region=(412, 165, 771, 72), skip_wait=True):
             
             while check(button='loading.png', region=(1577, 408, 302, 91), skip_wait=True): # dangerous code
