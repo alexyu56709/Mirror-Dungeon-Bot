@@ -68,7 +68,7 @@ def fight():
             gui.click(500, 83, duration=0.1)
 
             try:
-                res = gui.center(locateOnScreenEdges("gear.png", region=(0, 761, 548, 179), confidence=0.5, path=f"{UI_PATH}battle/"))
+                res = gui.center(locateOnScreenEdges("gear.png", region=(0, 761, 548, 179), confidence=0.5, path=pth(UI_PATH, "battle")))
                 chain(res)
             except gui.ImageNotFoundException:
                 gui.press("p", 1, 0.1)

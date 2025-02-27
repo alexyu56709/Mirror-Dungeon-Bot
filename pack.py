@@ -43,7 +43,7 @@ def pack_eval(level, regions, skip):
     if level == 2 or level == 3:
         banned += ["Crushed"]
     if level == 4 or level == 5:
-        banned = ["Violet", "Express", "Bullet", "Stopped", "Pride", "Abyss", "Time"]
+        banned = ["Violet", "WARP", "Express", "Full", "Bullet", "Stopped", "Pride", "Abyss", "Time"]
         # currently Full-Stop floor breaks pathing function, so we avoid it
 
     # getting text from pack names
