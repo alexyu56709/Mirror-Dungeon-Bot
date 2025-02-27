@@ -1,13 +1,33 @@
-import time, pyautogui as gui, easyocr, numpy as np, cv2
-from log import *
+import time, os, sys
+
+print("Loading...")
+load_time = time.time()
+
+import numpy as np, pickle, pyautogui as gui, cv2, logging
 from pyscreeze import Box
-from os import listdir
+
+try:
+    BASE_PATH = sys._MEIPASS
+    import liteOCR as myocr
+except:
+    BASE_PATH = os.path.abspath(".")
+    import ocr.liteOCR as myocr
+
+ocr = myocr.Reader()
+
+print(f"All packages imported in {(time.time() - load_time):.2f} seconds")
 
 
-UI_PATH = "ObjectDetection/UI/"
+def pth(*args):
+    return os.path.join(*args)
 
-ocr = easyocr.Reader(['en'])
+logging.basicConfig(
+    filename='game.log',  # Log file name
+    level=logging.INFO,   # Logging level
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
 
+UI_PATH = pth(BASE_PATH, "ObjectDetection", "UI")
 
 
 def connection():
@@ -32,7 +52,7 @@ def locateAllOnScreenRGBA(button, region=(0, 0, 1920, 1080), confidence=0.8, gra
         screenshot = gui.screenshot(region=region)
         screenshot = np.array(screenshot)
 
-    template = cv2.imread(path + button, cv2.IMREAD_UNCHANGED)
+    template = cv2.imread(pth(path, button), cv2.IMREAD_UNCHANGED)
     x, y, _, _ = region
 
     if template.shape[-1] == 4:
@@ -83,16 +103,16 @@ def locateOnScreenRGBA(button, region=(0, 0, 1920, 1080), confidence=0.8, graysc
     return match
 
 
-def countdown(seconds):
+def countdown(seconds): # no more than 99 seconds!
     for i in range(seconds, 0, -1):
         progress = (seconds - i) / seconds
         bar_length = 20
         bar = "[" + "#" * int(bar_length * progress) + "-" * (bar_length - int(bar_length * progress)) + "]"
         
-        print(f"Starting in: {i} {bar}", end="\r")
+        print(f"Starting in: {i:2} {bar}", end="\r")
         time.sleep(1)
     
-    print(" " * (len(f"Starting in: {seconds} [--------------------]")), end="\r")
+    print(" " * (len(f"Starting in: {seconds:2} [--------------------]")), end="\r")
     print("Grinding Time!")
 
 
@@ -216,7 +236,7 @@ def locateOnScreenEdges(button, region=(0, 0, 1920, 1080), confidence=0.8, path=
     screenshot = gui.screenshot(region=region)
     screenshot = np.array(screenshot)
     
-    template = cv2.imread(path + button, cv2.IMREAD_UNCHANGED)
+    template = cv2.imread(pth(path, button), cv2.IMREAD_UNCHANGED)
     x, y, _, _ = region
     
     if template.shape[-1] == 4:

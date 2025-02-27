@@ -1,7 +1,7 @@
 from utils import *
 
 PROBS = ["VeryHigh.png", "High.png", "Normal.png", "Low.png", "VeryLow.png"]
-PATH = f"{UI_PATH}event/"
+PATH = pth(UI_PATH, "event")
 
 
 def event():
@@ -32,7 +32,7 @@ def event():
         if check("check.png", region=(1265, 434, 430, 87), skip_wait=True, path=PATH):
             time.sleep(0.3)
             for prob in PROBS:
-                if check(f"sinprob/{prob}", conf=0.8, region=(42, 876, 1427, 74), click=True, skip_wait=True, path=PATH):
+                if check(pth("sinprob", prob), conf=0.8, region=(42, 876, 1427, 74), click=True, skip_wait=True, path=PATH):
                     break
             check("Commence.png", region=(1539, 906, 316, 126), click=True, path=PATH)
 

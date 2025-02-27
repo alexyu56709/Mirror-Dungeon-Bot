@@ -1,9 +1,12 @@
 __pycache__
 errors
-abnos
-choice
 ObjectDetection/abno
-Depreciated.py
+venv
+build
 game.log
 testing.py
 stats.py
+app_icon.ico 
+Bot.spec
+collect_files.py
+Depreciated.py

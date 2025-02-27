@@ -10,20 +10,20 @@ from shop import shop
 
 def dungeon_start():
     try:
-        check(button="start/Drive.png", region=(1229, 896, 156, 139), click=True, error=True)
-        check(button="start/MD.png", region=(528, 354, 279, 196), click=True, error=True)
-        check(button="start/Start.png", region=(1473, 657, 315, 161), click=True, error=True)
+        check(pth("start", "Drive.png"), region=(1229, 896, 156, 139), click=True, error=True)
+        check(pth("start", "MD.png"), region=(528, 354, 279, 196), click=True, error=True)
+        check(pth("start", "Start.png"), region=(1473, 657, 315, 161), click=True, error=True)
 
-        check(button="start/enterInvert.png", region=(943, 669, 382, 106), click=True, error=True)
+        check(pth("start", "enterInvert.png"), region=(943, 669, 382, 106), click=True, error=True)
         gui.moveTo(1726, 978)
         gui.click()
-        if check(button="start/ConfirmTeam.png", region=(1593, 830, 234, 90), error=True):
+        if check(pth("start", "ConfirmTeam.png"), region=(1593, 830, 234, 90), error=True):
             time.sleep(0.2)
             gui.click(1717, 878, duration=0.1)
 
         # Bonus Choice:
 
-        if check(button="start/enterBonus.png", region=(1566, 974, 266, 89), error=True):
+        if check(pth("start", "enterBonus.png"), region=(1566, 974, 266, 89), error=True):
             time.sleep(0.1)
 
             gui.moveTo(401, 381, duration=0.2)
@@ -36,13 +36,13 @@ def dungeon_start():
             gui.doubleClick(duration=0.1)
             time.sleep(0.1)
     
-        check(button="start/enterBonus.png", region=(1566, 974, 266, 89), click=True, error=True)
-        check(button="EGOconfirm.png", region=(957, 764, 330, 90), click=True, error=True)
+        check(pth("start", "enterBonus.png"), region=(1566, 974, 266, 89), click=True, error=True)
+        check("EGOconfirm.png", region=(957, 764, 330, 90), click=True, error=True)
 
         # Starting EGO
 
         time.sleep(0.1)
-        check(button="teams/Burn/BurnStart.png", region=(198, 207, 937, 682), click=True, error=True)
+        check(pth("teams", "Burn", "BurnStart.png"), region=(198, 207, 937, 682), click=True, error=True)
         time.sleep(0.1)
         gui.moveTo(1239, 395, duration=0.1)
         gui.doubleClick()
@@ -53,9 +53,9 @@ def dungeon_start():
         gui.doubleClick()
         time.sleep(0.1)
 
-        check(button="EGOconfirm.png", region=(794, 745, 321, 102), click=True, error=True)
+        check("EGOconfirm.png", region=(794, 745, 321, 102), click=True, error=True)
         time.sleep(0.2)
-        check(button="EGOconfirm.png", region=(794, 745, 321, 102), click=True, error=True)
+        check("EGOconfirm.png", region=(794, 745, 321, 102), click=True, error=True)
 
     except RuntimeError:
         print("Initialization error")
@@ -68,19 +68,20 @@ def dungeon_start():
 
 def dungeon_end():
     try:
-        if check("end/victory.png", region=(1426, 116, 366, 154), error=True):
+        if check(pth("end", "victory.png"), region=(1426, 116, 366, 154), error=True):
             gui.click(1693, 841)
 
         gui.moveTo(1700, 1026)
 
-        check("end/Claim.png", click=True, region=(1540, 831, 299, 132), error=True)
-        check("end/ClaimInvert.png", click=True, region=(1156, 776, 360, 94), error=True)
-        check("end/ConfirmInvert.png", click=True, region=(987, 704, 318, 71), error=True)
+        check(pth("end", "Claim.png"), click=True, region=(1540, 831, 299, 132), error=True)
+        check(pth("end", "ClaimInvert.png"), click=True, region=(1156, 776, 360, 94), error=True)
+        check(pth("end", "ConfirmInvert.png"), click=True, region=(987, 704, 318, 71), error=True)
 
         while not check("loading.png", region=(1577, 408, 302, 91), skip_wait=True): # potentially dangerous
             check("EGOconfirm.png", region=(816, 657, 275, 96), skip_wait=True, click=True)
 
-        check("start/Drive.png", region=(1229, 896, 156, 139), error=True, wait=10)
+        check(pth("start", "Drive.png"), region=(1229, 896, 156, 139), error=True, wait=10)
+        time.sleep(0.5)
 
     except RuntimeError:
         print("Termination error")
@@ -107,10 +108,15 @@ def main_loop():
         if check(button="ServerError.png", region=(651, 640, 309, 124), click=True, skip_wait=True):
             logging.error('Server error happened')
 
+        if check(button="EventEffect.png", region=(710, 215, 507, 81), skip_wait=True):
+            gui.click(773, 521)
+            time.sleep(0.2)
+            gui.click(967, 774)
+
         if gui.getActiveWindowTitle() != 'LimbusCompany':
             pause()
         
-        if check(button="end/victory.png", region=(1478, 143, 296, 116), skip_wait=True):
+        if check(pth("end", "victory.png"), region=(1478, 143, 296, 116), skip_wait=True):
             logging.info('Run Completed')
             break
         
@@ -128,7 +134,7 @@ def main_loop():
 
         if error > 1000:
             logging.error('We are stuck')
-            gui.screenshot(f"errors/stuck{int(time.time())}.png") # debugging
+            gui.screenshot(pth(BASE_PATH, "errors", "stuck", f"{int(time.time())}.png")) # debugging
             close_limbus()
 
     dungeon_end()

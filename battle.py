@@ -1,9 +1,31 @@
 from utils import *
 from event import event
 
-PATH = f"{UI_PATH}battle/"
-SINS = [name for name in listdir(f"{PATH}sins/")]
+PATH = pth(UI_PATH, "battle")
+SINS = [name for name in os.listdir(pth(PATH, "sins"))]
 
+# sinners = ["YISANG", "FAUST" , "ISHMAEL", "RODION", "SINCLAIR", "GREGOR"]
+
+# SINNERS = {
+#     "YISANG"    : ( 351, 207, 196, 285),
+#     "FAUST"     : ( 547, 207, 196, 285),
+#     "DONQUIXOTE": ( 743, 207, 196, 285),
+#     "RYOSHU"    : ( 939, 207, 196, 285),
+#     "MEURSAULT" : (1135, 207, 196, 285),
+#     "HONGLU"    : (1331, 207, 196, 285),
+#     "HEATHCLIFF": ( 351, 492, 196, 285),
+#     "ISHMAEL"   : ( 547, 492, 196, 285),
+#     "RODION"    : ( 743, 492, 196, 285),
+#     "SINCLAIR"  : ( 939, 492, 196, 285),
+#     "OUTIS"     : (1135, 492, 196, 285),
+#     "GREGOR"    : (1331, 492, 196, 285)
+# }
+
+# region = (399, 272, 1081, 355)
+# square = (399, 330, 1081, 239)
+
+# def select(sinners):
+    
 
 def chain(res):
     gui.moveTo(res)
@@ -14,7 +36,7 @@ def chain(res):
     while True:
         for sin in SINS:
             try:
-                locateOnScreenRGBA(f"sins/{sin}", region=(int(x), int(y), 137, 139), confidence=0.8, grayscale=False, path=PATH, A=True)
+                locateOnScreenRGBA(pth("sins", sin), region=(int(x), int(y), 137, 139), confidence=0.8, grayscale=False, path=PATH, A=True)
                 gui.moveTo(x + 68, y + 200)
                 break
             except gui.ImageNotFoundException:
@@ -52,15 +74,15 @@ def fight():
                 gui.press("p", 1, 0.1)
                 gui.press("enter", 1, 0.1)
 
-        if check(button='event/eventskip.png', region=(850, 437, 103, 52), skip_wait=True):
+        if check(pth("event", "eventskip.png"), region=(850, 437, 103, 52), skip_wait=True):
             event()
 
-        if check(button='loading.png', region=(1577, 408, 302, 91), skip_wait=True)  or \
-           check(button='path/Move.png', region=(1805, 107, 84, 86), skip_wait=True) or \
-           check("grab/EGObin.png", region=(69, 31, 123, 120), skip_wait=True)       or \
-           check("grab/encounterreward.png", region=(412, 165, 771, 72), skip_wait=True):
+        if check('loading.png', region=(1577, 408, 302, 91), skip_wait=True)  or \
+           check(pth("path", "Move.png"), region=(1805, 107, 84, 86), skip_wait=True) or \
+           check(pth("grab", "EGObin.png"), region=(69, 31, 123, 120), skip_wait=True)       or \
+           check(pth("grab", "encounterreward.png"), region=(412, 165, 771, 72), skip_wait=True):
             
-            while check(button='loading.png', region=(1577, 408, 302, 91), skip_wait=True): # dangerous code
+            while check('loading.png', region=(1577, 408, 302, 91), skip_wait=True): # dangerous code
                 time.sleep(0.1)
     
             print("Battle is over")

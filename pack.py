@@ -1,7 +1,7 @@
 from utils import *
 
 
-PATH = f"{UI_PATH}pack/"
+PATH = pth(UI_PATH, "pack")
 
 
 
@@ -10,57 +10,102 @@ def within_region(x, y, regions):
         x1, y1, w, h = region
         if x1 < x < x1 + w and y1 < y < y1 + h:
             return i
+        
+
+def best_match(target, text, threshold=0.6):
+    target_len = len(target)
+    best_ratio = 0
+
+    empty_len = int((1 - threshold)*len(text))
+    text = empty_len*" " + text + empty_len*" "
+
+    for i in range(len(text) - target_len + 1):
+        substring = text[i:i + target_len]
+        matches = sum(1 for a, b in zip(target, substring) if a == b)
+        ratio = matches / target_len
+
+        best_ratio = max(best_ratio, ratio)
+
+    return best_ratio >= threshold
 
 
 def pack_eval(level, regions, skip):
     
+    # best packs
     if level == 1: priority = ["Outcast", "Gamblers"]
     elif level == 2: priority = ["Chicken"]
     else: priority = []
 
-    banned = ["Factory", "Unloving", "Faith", "Crushed", "Violet", "Express", "Bullet", "Pride"]
+    # worst packs
+    banned = []
+    if level == 1 or level == 2:
+        banned = ["Factory", "Unloving", "Faith"]
+    if level == 2 or level == 3:
+        banned += ["Crushed"]
+    if level == 4 or level == 5:
+        banned = ["Violet", "Express", "Bullet", "Stopped", "Pride", "Abyss", "Time"]
+        # currently Full-Stop floor breaks pathing function, so we avoid it
 
-    pr_coords = []
+    # getting text from pack names
     data = np.array(gui.screenshot(region=(161, 657, 1582, 73)))
     results = ocr.readtext(data, decoder='greedy')
 
+    print(results) # testing
+
+    pr_coords = [] # locating all best packs coordinates
     for card in priority:
         for result in results:
-            if card in result[1]:
-                pr_coords.append(gui.center(Box(min(x:= [p[0] for p in result[0]]) + 161, min(y:= [p[1] for p in result[0]]) + 657, max(x) - min(x), max(y) - min(y))))
+            if best_match(card, result[1]):
+                pr_coords.append(gui.center(
+                    Box(min(x:= [p[0] for p in result[0]]) + 161, 
+                        min(y:= [p[1] for p in result[0]]) + 657, 
+                        max(x) - min(x), 
+                        max(y) - min(y))))
                 break
         
-    if pr_coords:
+    if pr_coords: # picking best pack
         return within_region(pr_coords[0][0], pr_coords[0][1], regions)
     elif level < 3 and skip != 3:
         return None
     
-    bn_coords = []
+    bn_coords = [] # locating all worst packs coordinates
     for card in banned:
         for result in results:
-            if card in result[1]:
-                bn_coords.append(gui.center(Box(min(x:= [p[0] for p in result[0]]) + 161, min(y:= [p[1] for p in result[0]]) + 657, max(x) - min(x), max(y) - min(y))))
+            if best_match(card, result[1]):
+                bn_coords.append(gui.center(
+                    Box(min(x:= [p[0] for p in result[0]]) + 161, 
+                        min(y:= [p[1] for p in result[0]]) + 657, 
+                        max(x) - min(x), 
+                        max(y) - min(y))))
     
-    remove = set()
+    remove = set() # removing S.H.I.T. packs
     if bn_coords:
         for coord in bn_coords:
             i = within_region(coord[0], coord[1], regions)
             remove.add(i)
     filtered = [val for i, val in enumerate(regions) if i not in remove]
 
-    ego_coords = [gui.center(box) for box in locate_all("teams/Burn/littleBurn.png", conf=0.8)]
+    if not filtered and skip != 3: # if all packs are S.H.I.T.
+        return None
+    elif not filtered:
+        # currently, theoretical chance of this event is only 2.7*10^-13 % on floor 4
+        # it is impossible for other floors
+        print("May Ayin save us all!") # we have to pick S.H.I.T. 
+        return 0 # 16 and 5 
+
+    # locating relevant ego gifts in floor rewards
+    ego_coords = [gui.center(box) for box in locate_all(pth("teams", "Burn", "littleBurn.png"), conf=0.8)]
     owned_x = [box[0] + box[2] for box in locate_all("OwnedSmall.png", conf=0.8, path=PATH)]
 
-    remove = set()
+    remove = set() # excluding owned ego gifts from evaluation
     for x in owned_x:
         for i in range(len(ego_coords)):
             if abs(x - ego_coords[i][0]) < 25:
                 remove.add(i)
     ego_coords = [val for i, val in enumerate(ego_coords) if i not in remove]
 
-    # print(len(ego_coords)) # testing
 
-    weight = [0]*len(filtered)
+    weight = [0]*len(filtered) # evaluating each floor based on ego gifts
     if ego_coords:
         for coord in ego_coords:
             i = within_region(coord[0], coord[1], filtered)
@@ -110,9 +155,9 @@ def pack(level):
             gui.moveTo(1721, 999)
             time.sleep(2)
     
-    if check(button="path/Move.png", region=(1805, 107, 84, 86), error=True) and level != 1:
-        while check(button="path/Move.png", skip_wait=True, region=(1805, 107, 84, 86)): # potentially dangerous
+    if check(pth("path", "Move.png"), region=(1805, 107, 84, 86), error=True) and level != 1:
+        while check(pth("path", "Move.png"), skip_wait=True, region=(1805, 107, 84, 86)): # potentially dangerous
             time.sleep(0.1)
-        check(button="path/Move.png", region=(1805, 107, 84, 86), error=True)
+        check(pth("path", "Move.png"), region=(1805, 107, 84, 86), error=True)
     time.sleep(0.5)
     return (True, level)

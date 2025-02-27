@@ -1,6 +1,7 @@
 from utils import *
 
-PATH = f"{UI_PATH}path/"
+PATH = pth(UI_PATH, "path")
+
 NODE_LIST = ["event.png", "eventSmall.png", 
              "eventNew.png", "eventNewSmall.png", # Order MATTERS!!!
              "risk.png",  "riskSmall.png", 
@@ -101,7 +102,7 @@ def move():
     
     position(Dante)
 
-    if check(button="end/victory.png", region=(1478, 143, 296, 116), skip_wait=True): return False
+    if check(pth("end", "victory.png"), region=(1478, 143, 296, 116), skip_wait=True): return False
 
     paths = directions()
     regions = [(624, 101 + i*275, 282, 275) for i in range(3) if paths[i]]
