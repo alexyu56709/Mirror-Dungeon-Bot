@@ -1,9 +1,22 @@
+```
+   ________                             ______     _           __         
+  / ____/ /_  ____ __________ ____     / ____/____(_)___  ____/ /__  _____
+ / /   / __ \/ __ `/ ___/ __ `/ _ \   / / __/ ___/ / __ \/ __  / _ \/ ___/
+/ /___/ / / / /_/ / /  / /_/ /  __/  / /_/ / /  / / / / / /_/ /  __/ /    
+\____/_/ /_/\__,_/_/   \__, /\___/   \____/_/  /_/_/ /_/\__,_/\___/_/     
+                      /____/
+```
+
 # ChargeGrinder
 **ChargeGrinder** is a Limbus Company bot that charges through MD5 for you
 
-### Features:
-- **Automated Mirror Dungeon Runs:** ChargeGrinder will automatically complete all floors of the Mirror Dungeon.
-- **Speed:** Usually each floor takes no more than 5 minutes, so 1 MD5 run lasts between 20-25 minutes.
+
+**Automated Mirror Dungeon Runs:** Only the number of dungeons to grind needs to be specified, everything else is handled by the bot.
+
+<span style="font-size: 110%;">**Speed:** </span> Usually each floor takes no more than 5 minutes, so 1 MD5 run lasts between **20-25 minutes.**
+
+---
+### Usage:
 - **User Input:** The program will prompt you to enter the number of Mirror Dungeons to grind, and it will start running a few seconds after your response (You must switch to Limbus Company window, main screen). It is not recommended to move mouse while bot is running, but you can Alt+Tab to new window for bot to pause (or crash, depends on the odds).
 - **In-Game Requirements:** 
     - You must leave the Limbus Company window open and in fullscreen mode while the bot runs. Mouse interactions in the game will be controlled by the bot.
@@ -16,26 +29,30 @@
     - Winrates focused encounters and chains skills 1 and 2 for human encounters (Skill 3 animations are too long)
 - **Limitations:** ChargeGrinder still needs additional features, testing, and bug fixes. However, it can successfully grind a few easy dungeons while you are sleeping.
 
----
+--- 
 
-### Requirements:
-- Python 3
-- `os`
-- `time`
-- `numpy`
-- `cv2`
-- `pyscreeze`
-- `pyautogui`
-- `easyocr`
-- `logging`
+### Requirements  
+#### Option 1: Run the Prebuilt Executable  
+Simply launch **CGrinder.exe** from the `dist` folder—no additional files required.  
 
----
+#### Option 2: Run with Python  
+Ensure you have **Python 3** installed and the following dependencies:  
+```bash
+pip install numpy opencv-python-headless pyscreeze pyautogui Pillow onnxruntime
+```
+Or manually install:  
+- `numpy`  
+- `opencv-python-headless`  
+- `pyscreeze`  
+- `pyautogui`  
+- `Pillow`  
+- `onnxruntime`  
 
 ### Setup Instructions:
 
 1. **Team Setup:** 
    - ChargeGrinder is currently tested with an Uptie 4 burn team (the fastest team for easy MD)
-   - Team members: Faust, Ishmael, Gregor, Sinclair, Ryoshu and Rodion
+   - Team members: Faust, Ishmael, Gregor, Sinclair, YiSang and Rodion
 # ![team.png](team.png)
    - The team is inspired by this MD5 speedrun: 
 # [![Watch on YouTube](https://img.youtube.com/vi/dCUUHMLDWkY/0.jpg)](https://www.youtube.com/watch?v=dCUUHMLDWkY)
