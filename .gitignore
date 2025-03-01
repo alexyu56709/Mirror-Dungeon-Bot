@@ -2,6 +2,7 @@ __pycache__
 errors
 ObjectDetection/abno
 venv
+ocr
 build
 game.log
 testing.py

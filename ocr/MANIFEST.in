@@ -1,2 +1,0 @@
-include liteOCR/character/*.txt
-include liteOCR/*.onnx

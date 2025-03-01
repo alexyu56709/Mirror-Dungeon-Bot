@@ -5,13 +5,12 @@ load_time = time.time()
 
 import numpy as np, pickle, pyautogui as gui, cv2, logging
 from pyscreeze import Box
+import torchfree_ocr as myocr
 
 try:
     BASE_PATH = sys._MEIPASS
-    import liteOCR as myocr
 except:
     BASE_PATH = os.path.abspath(".")
-    import ocr.liteOCR as myocr
 
 ocr = myocr.Reader()
 
