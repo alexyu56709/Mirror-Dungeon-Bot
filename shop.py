@@ -123,7 +123,7 @@ def enhance_glimpse():
                 if coords[i] != []:
                     gui.click(coords[i][0])
                     gui.click(1182, 879)
-                    check(pth("end", "ConfirmInvert.png"), region=(985, 701, 322, 75), clk=True)
+                    check(pth("end", "ConfirmInvert.png"), region=(985, 701, 322, 75), click=True)
                     connection()
                     time.sleep(0.5)
                     gui.click(750, 879, duration=0.1) # exit
