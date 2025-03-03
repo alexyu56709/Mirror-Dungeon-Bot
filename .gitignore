@@ -3,7 +3,7 @@ errors
 ObjectDetection/abno
 venv
 build
-game.logg
+game.log
 testing.py
 stats.py
 collect_files.py
