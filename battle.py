@@ -80,7 +80,8 @@ def fight():
         if check('loading.png', region=(1577, 408, 302, 91), skip_wait=True)  or \
            check(pth("path", "Move.png"), region=(1805, 107, 84, 86), skip_wait=True) or \
            check(pth("grab", "EGObin.png"), region=(69, 31, 123, 120), skip_wait=True)       or \
-           check(pth("grab", "encounterreward.png"), region=(412, 165, 771, 72), skip_wait=True):
+           check(pth("grab", "encounterreward.png"), region=(412, 165, 771, 72), skip_wait=True) or \
+           check(pth("end", "victory.png"), region=(1478, 143, 296, 116), skip_wait=True):
             
             while check('loading.png', region=(1577, 408, 302, 91), skip_wait=True): # dangerous code
                 time.sleep(0.1)
