@@ -3,7 +3,7 @@ import time, os, sys
 print("Loading...")
 load_time = time.time()
 
-import numpy as np, pickle, pyautogui as gui, cv2, logging
+import numpy as np, pyautogui as gui, cv2, logging
 from pyscreeze import Box
 import torchfree_ocr as myocr
 
@@ -12,7 +12,7 @@ try:
 except:
     BASE_PATH = os.path.abspath(".")
 
-ocr = myocr.Reader()
+ocr = myocr.Reader(["en"])
 
 print(f"All packages imported in {(time.time() - load_time):.2f} seconds")
 

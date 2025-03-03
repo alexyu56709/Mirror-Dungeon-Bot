@@ -38,7 +38,7 @@ Simply launch **CGrinder.exe** from the `dist` folder—no additional files requ
 #### Option 2: Run with Python  
 Ensure you have **Python 3** installed and the following dependencies:  
 ```bash
-pip install numpy opencv-python-headless pyscreeze pyautogui Pillow onnxruntime
+pip install numpy opencv-python-headless pyscreeze pyautogui Pillow torchfree-ocr
 ```
 Or manually install:  
 - `numpy`  
@@ -46,7 +46,7 @@ Or manually install:
 - `pyscreeze`  
 - `pyautogui`  
 - `Pillow`  
-- `onnxruntime`  
+- `torchfree-ocr`  
 
 ### Setup Instructions:
 
