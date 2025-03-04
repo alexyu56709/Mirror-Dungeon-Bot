@@ -4,27 +4,36 @@ from event import event
 PATH = pth(UI_PATH, "battle")
 SINS = [name for name in os.listdir(pth(PATH, "sins"))]
 
-# sinners = ["YISANG", "FAUST" , "ISHMAEL", "RODION", "SINCLAIR", "GREGOR"]
+sinners = ["YISANG", "FAUST" , "ISHMAEL", "RODION", "SINCLAIR", "GREGOR"]
 
-# SINNERS = {
-#     "YISANG"    : ( 351, 207, 196, 285),
-#     "FAUST"     : ( 547, 207, 196, 285),
-#     "DONQUIXOTE": ( 743, 207, 196, 285),
-#     "RYOSHU"    : ( 939, 207, 196, 285),
-#     "MEURSAULT" : (1135, 207, 196, 285),
-#     "HONGLU"    : (1331, 207, 196, 285),
-#     "HEATHCLIFF": ( 351, 492, 196, 285),
-#     "ISHMAEL"   : ( 547, 492, 196, 285),
-#     "RODION"    : ( 743, 492, 196, 285),
-#     "SINCLAIR"  : ( 939, 492, 196, 285),
-#     "OUTIS"     : (1135, 492, 196, 285),
-#     "GREGOR"    : (1331, 492, 196, 285)
-# }
+SINNERS = {
+    "YISANG"    : ( 351, 207, 196, 285),
+    "FAUST"     : ( 547, 207, 196, 285),
+    "DONQUIXOTE": ( 743, 207, 196, 285),
+    "RYOSHU"    : ( 939, 207, 196, 285),
+    "MEURSAULT" : (1135, 207, 196, 285),
+    "HONGLU"    : (1331, 207, 196, 285),
+    "HEATHCLIFF": ( 351, 492, 196, 285),
+    "ISHMAEL"   : ( 547, 492, 196, 285),
+    "RODION"    : ( 743, 492, 196, 285),
+    "SINCLAIR"  : ( 939, 492, 196, 285),
+    "OUTIS"     : (1135, 492, 196, 285),
+    "GREGOR"    : (1331, 492, 196, 285)
+}
 
-# region = (399, 272, 1081, 355)
-# square = (399, 330, 1081, 239)
 
-# def select(sinners):
+def select(sinners):
+    selected = [gui.center(box) for box in locate_all(pth("battle", "selected.png"), conf=0.8)]
+    num = len(selected)
+    if num < 6:
+        for sinner in sinners:
+            if not check(pth("battle", "selected.png"), region=SINNERS[sinner], skip_wait=True):
+                gui.click(gui.center(SINNERS[sinner]))
+                time.sleep(0.1)
+                num += 1 
+                if num == 6:
+                    break
+    gui.click(1728, 884) # to battle
     
 
 def chain(res):
@@ -53,8 +62,9 @@ def chain(res):
 
 
 def fight():
-    if not check("TOBATTLE.png", region=(1586, 820, 254, 118), click=True, skip_wait=True, path=PATH) and \
-       not check("battleEGO.png", region=(1525, 104, 86, 81), skip_wait=True, path=PATH): return False
+    is_tobattle = check("TOBATTLE.png", region=(1586, 820, 254, 118), skip_wait=True, path=PATH)
+    if not is_tobattle and not check("battleEGO.png", region=(1525, 104, 86, 81), skip_wait=True, path=PATH): return False
+    elif is_tobattle: select(sinners)
 
     print("Entered Battle")
 
