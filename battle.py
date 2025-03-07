@@ -68,9 +68,11 @@ def fight():
 
     print("Entered Battle")
 
-    while check("loading.png", region=(1577, 408, 302, 91), wait=2): # dangerous code
-            print("loading screen...")
-            time.sleep(0.5)
+    start_time = time.time()
+    while check("loading.png", region=(1577, 408, 302, 91), wait=2):
+        if time.time() - start_time > 20: raise RuntimeError("Infinite loop exited")
+        print("loading screen...")
+        time.sleep(0.5)
 
 
     while True:
@@ -93,7 +95,9 @@ def fight():
            check(pth("grab", "encounterreward.png"), region=(412, 165, 771, 72), skip_wait=True) or \
            check(pth("end", "victory.png"), region=(1478, 143, 296, 116), skip_wait=True):
             
-            while check('loading.png', region=(1577, 408, 302, 91), skip_wait=True): # dangerous code
+            start_time = time.time()
+            while check('loading.png', region=(1577, 408, 302, 91), skip_wait=True):
+                if time.time() - start_time > 20: raise RuntimeError("Infinite loop exited")
                 time.sleep(0.1)
     
             print("Battle is over")

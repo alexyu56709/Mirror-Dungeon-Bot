@@ -77,7 +77,9 @@ def dungeon_end():
         check(pth("end", "ClaimInvert.png"), click=True, region=(1156, 776, 360, 94), error=True)
         check(pth("end", "ConfirmInvert.png"), click=True, region=(987, 704, 318, 71), error=True)
 
-        while not check("loading.png", region=(1577, 408, 302, 91), skip_wait=True): # potentially dangerous
+        start_time = time.time()
+        while not check("loading.png", region=(1577, 408, 302, 91), skip_wait=True):
+            if time.time() - start_time > 20: raise RuntimeError("Infinite loop exited")
             check("EGOconfirm.png", region=(816, 657, 275, 96), skip_wait=True, click=True)
 
         check(pth("start", "Drive.png"), region=(1229, 896, 156, 139), error=True, wait=10)
@@ -96,7 +98,9 @@ def main_loop():
 
     dungeon_start()
 
-    while check(button="loading.png", region=(1577, 408, 302, 91), wait=1): # potentially dangerous
+    start_time = time.time()
+    while check(button="loading.png", region=(1577, 408, 302, 91), wait=1):
+        if time.time() - start_time > 20: raise RuntimeError("Infinite loop exited")
         print("loading screen...")
         time.sleep(0.5)
 

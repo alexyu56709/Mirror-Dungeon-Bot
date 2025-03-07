@@ -71,7 +71,9 @@ def grab_card():
             check("EGOconfirm.png", region=(1118, 754, 189, 70), click=True, error=True) # confirm card
             check("EGOconfirm.png", region=(791, 745, 336, 104), wait=1, click=True)     # confirm ego
 
-            while check("encounterreward.png", region=(412, 165, 771, 72), skip_wait=True, path=PATH): # dangerous code
+            start_time = time.time()
+            while check("encounterreward.png", region=(412, 165, 771, 72), skip_wait=True, path=PATH):
+                if time.time() - start_time > 20: raise RuntimeError("Infinite loop exited")
                 time.sleep(0.1)
             
             return True

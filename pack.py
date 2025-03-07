@@ -156,7 +156,9 @@ def pack(level):
             time.sleep(2)
     
     if check(pth("path", "Move.png"), region=(1805, 107, 84, 86), error=True) and level != 1:
-        while check(pth("path", "Move.png"), skip_wait=True, region=(1805, 107, 84, 86)): # potentially dangerous
+        start_time = time.time()
+        while check(pth("path", "Move.png"), skip_wait=True, region=(1805, 107, 84, 86)):
+            if time.time() - start_time > 20: raise RuntimeError("Infinite loop exited")
             time.sleep(0.1)
         check(pth("path", "Move.png"), region=(1805, 107, 84, 86), error=True)
     time.sleep(0.5)

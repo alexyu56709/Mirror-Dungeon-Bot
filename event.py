@@ -7,7 +7,10 @@ PATH = pth(UI_PATH, "event")
 def event():
     if not check("eventskip.png", region=(850, 437, 103, 52), skip_wait=True, path=PATH): return False
 
-    while True:  # dangerous code
+    start_time = time.time()
+    while True:
+        if time.time() - start_time > 100: raise RuntimeError("Infinite loop exited")
+
         for _ in range(3): gui.click(906, 465)
 
         if check("choices.png", region=(1036, 152, 199, 77), skip_wait=True, path=PATH):

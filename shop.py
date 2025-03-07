@@ -255,7 +255,9 @@ def fuse_loop(to_buy):
 
 
 def balance(money):
-    while True: # potentially dangerous
+    start_time = time.time()
+    while True:
+        if time.time() - start_time > 20: raise RuntimeError("Infinite loop exited")
         bal = detect_char(region=(857, 175, 99, 57), digit=True)
         if bal != None: break
     if bal >= money: return True

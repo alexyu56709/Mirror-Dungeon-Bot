@@ -30,7 +30,9 @@ UI_PATH = pth(BASE_PATH, "ObjectDetection", "UI")
 
 
 def connection():
-    while check("connecting.png", region=(1548, 66, 293, 74), skip_wait=True): # potentially dangerous
+    start_time = time.time()
+    while check("connecting.png", region=(1548, 66, 293, 74), skip_wait=True):
+        if time.time() - start_time > 20: raise RuntimeError("Infinite loop exited")
         time.sleep(0.1)
 
 
@@ -272,3 +274,5 @@ def locateOnScreenEdges(button, region=(0, 0, 1920, 1080), confidence=0.8, path=
     
     match_w, match_h = template.shape[1], template.shape[0]
     return Box(int(match_x), int(match_y), int(match_w), int(match_h))
+
+connection()
