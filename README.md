@@ -1,5 +1,5 @@
 <p align="center">
-<a href="https://github.com/AlexWalp/Mirror-Dungeon-Bot/releases/download/v2.0.0/app.exe" style="text-decoration: none; display: inline-block;">
+<a href="https://github.com/AlexWalp/Mirror-Dungeon-Bot/releases/download/v2.0.1/app.exe" style="text-decoration: none; display: inline-block;">
   <img alt="Download" src="https://img.shields.io/badge/app.exe-Download-blue.svg">
 </a>
 <img alt="version" src="https://img.shields.io/github/v/release/AlexWalp/Mirror-Dungeon-Bot">
@@ -16,13 +16,13 @@
                 \____/_/ /_/\__,_/_/   \__, /\___/   \____/_/  /_/_/ /_/\__,_/\___/_/     
                                       /____/
 
-                          A Limbus Company bot that charges through MD5 for you
+                          A Limbus Company bot that charges through MD6 for you
 ```
 
 <p align="center"><img src="ImageAssets/readme/preview.png" /></p>
 
 ### ⚡ Speed
-A **Normal MD5** run lasts between **20–25 minutes** for a Burn team. <br>
+A **Normal MD6** run lasts between **20–25 minutes** for a Burn team. <br>
 And it takes **35–45 minutes** for one **Hard MD** run with a Rupture team
 
 ---
@@ -125,7 +125,7 @@ And it takes **35–45 minutes** for one **Hard MD** run with a Rupture team
 ---
 # Installation
 ### 📦 Option 1: Run the Prebuilt Executable 
-[![Download](https://img.shields.io/badge/app.exe-Download-blue.svg)](https://github.com/AlexWalp/Mirror-Dungeon-Bot/releases/download/v2.0.0/app.exe) <p>
+[![Download](https://img.shields.io/badge/app.exe-Download-blue.svg)](https://github.com/AlexWalp/Mirror-Dungeon-Bot/releases/download/v2.0.1/app.exe) <p>
 - Launch **app.exe** from the `dist` folder - no additional files required.
 - No OCR is used anymore, all detection is now done with open cv.
 
