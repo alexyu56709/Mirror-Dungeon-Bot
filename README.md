@@ -126,7 +126,7 @@ And it takes **35–45 minutes** for one **Hard MD** run with a Rupture team
 # Installation
 ### 📦 Option 1: Run the Prebuilt Executable 
 [![Download](https://img.shields.io/badge/app.exe-Download-blue.svg)](https://github.com/AlexWalp/Mirror-Dungeon-Bot/releases/download/v2.0.1/app.exe) <p>
-- Launch **app.exe** from the `dist` folder - no additional files required.
+- Launch **app.exe** from the latest release - no additional files required.
 - No OCR is used anymore, all detection is now done with open cv.
 
 ### 🐍 Option 2: Run with Python
