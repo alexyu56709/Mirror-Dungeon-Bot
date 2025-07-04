@@ -1,5 +1,5 @@
 <p align="center">
-<a href="https://github.com/AlexWalp/Mirror-Dungeon-Bot/releases/download/v2.0.1/app.exe" style="text-decoration: none; display: inline-block;">
+<a href="https://github.com/AlexWalp/Mirror-Dungeon-Bot/releases/latest/download/app.exe" style="text-decoration: none; display: inline-block;">
   <img alt="Download" src="https://img.shields.io/badge/app.exe-Download-blue.svg">
 </a>
 <img alt="version" src="https://img.shields.io/github/v/release/AlexWalp/Mirror-Dungeon-Bot">
@@ -125,7 +125,7 @@ And it takes **35–45 minutes** for one **Hard MD** run with a Rupture team
 ---
 # Installation
 ### 📦 Option 1: Run the Prebuilt Executable 
-[![Download](https://img.shields.io/badge/app.exe-Download-blue.svg)](https://github.com/AlexWalp/Mirror-Dungeon-Bot/releases/download/v2.0.1/app.exe) <p>
+[![Download](https://img.shields.io/badge/app.exe-Download-blue.svg)](https://github.com/AlexWalp/Mirror-Dungeon-Bot/releases/latest/download/app.exe) <p>
 - Launch **app.exe** from the latest release - no additional files required.
 - No OCR is used anymore, all detection is now done with open cv.
 
