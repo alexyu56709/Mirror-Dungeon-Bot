@@ -239,6 +239,7 @@ def countdown(seconds): # no more than 99 seconds!
     print("Grinding Time!")
 
 def pause():
+    logging.info("Execution paused")
     if p.APP:
         QMetaObject.invokeMethod(p.APP, "to_pause", Qt.ConnectionType.QueuedConnection)
         p.pause_event.clear()
@@ -256,6 +257,7 @@ def pause():
                 countdown(5)
                 break
     set_window()
+    logging.info("Execution resumed")
 
 
 def close_limbus():

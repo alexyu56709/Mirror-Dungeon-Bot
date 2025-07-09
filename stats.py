@@ -1,195 +1,271 @@
-import re
-from collections import defaultdict
+import datetime, csv, sys, os
 
-file = "game.log"
 
-def parse_floors(log_file):
-    with open(log_file, "r") as f:
-        lines = f.readlines()
+class Floor:
+    def __init__(self, st_time):
+        self.st_time = st_time
+        self.time = None
 
-    floors = defaultdict(list)
-    current_floor = None
+        self.pack = None
+        self.battles = {
+            "Normal": [],
+            "Focused": [],
+            "Risky": [],
+            "Miniboss": [],
+            "Boss": [],
+        }
+    
+    def add_pack(self, pack):
+        self.pack = pack
+
+    def add_event(self, time, event):
+        self.battles[event].append(time)
+    
+    def end(self, end_time):
+        self.time = end_time - self.st_time
+
+
+class Run:
+    def __init__(self, st_time, team):
+        self.st_time = st_time
+        self.time = None
+
+        self.team = team
+        self.diff = None
+        self.state = 0
+        self.floors = {}
+        self.event = {"name": None, "st_time": None}
+
+    def check_order(self, floor):
+        if floor == self.state + 1:
+            self.state = floor
+        else:
+            raise ValueError
+
+    def add_floor(self, number, st_time):
+        if self.state != 0:
+            self.floors[self.state].end(st_time)
+        self.check_order(number)
+        self.floors[self.state] = Floor(st_time)
+
+    def add_pack(self, pack):
+        self.floors[self.state].add_pack(pack)
+
+    def add_diff(self, diff):
+        self.diff = diff
+
+    def add_event(self, st_time, event):
+        self.event["name"] = event
+        self.event["st_time"] = st_time
+
+    def end_event(self, end_time):
+        if self.event["name"] == None or self.event["st_time"] == None or self.state == 0:
+            raise ValueError
+        time = end_time - self.event["st_time"]
+        self.floors[self.state].add_event(time, self.event["name"])
+
+    def end(self, end_time):
+        self.time = end_time - self.st_time
+
+
+def get_next_word(text, search_word):
+    words = text.split()
+    try:
+        index = words.index(search_word)
+        if index + 1 < len(words):
+            return words[index + 1]
+        return None
+    except ValueError:
+        return None
+
+def unix_time(timestamp_str, shift=0):
+    dt_str = timestamp_str.split(',')[0]
+    dt = datetime.datetime.strptime(dt_str, "%Y-%m-%d %H:%M:%S")
+    return int(dt.timestamp()) - shift
+
+
+
+
+KEYWORDS = ["fight", "Battle is over", "Floor", "Pack:", "Team:", "Difficulty:", "Run Completed", "paused", "resumed"]
+
+def process_log_file(file_path):
+    # Can raise FileNotFoundError
+    useful_lines = []
+    with open(file_path, 'r') as file:
+        for line in file:
+            for word in KEYWORDS:
+                if word in line:
+                    useful_lines.append(line[:-1])
+                    break
+    return useful_lines
+
+
+def build_data(lines):
+    data = []
+    run = None
+
+    shift = 0
+    st_shift = None
+
+    reset = True
 
     for line in lines:
-        match = re.search(r"Floor (\d+)", line)
-        if match:
-            current_floor = int(match.group(1))
+        if reset and "Team:" not in line:
             continue
 
-        if current_floor is not None:
-            floors[current_floor].append(line)
+        try:
+            if "fight" in line and run:
+                run.add_event(unix_time(line, shift), get_next_word(line, "Entering"))
+            elif "Battle is over" in line and run:
+                run.end_event(unix_time(line, shift))
+            elif "Floor" in line and run:
+                run.add_floor(int(get_next_word(line, "Floor")), unix_time(line, shift))
+            elif "Pack:" in line and run:
+                run.add_pack(get_next_word(line, "Pack:"))
+            elif "Run Completed" in line:
+                if run and run.state == 5:
+                    run.floors[run.state].end(unix_time(line, shift))
+                    run.end(unix_time(line, shift))
+                    data.append(run)
+                    run = None
+            elif "Team:" in line:
+                reset = False
+                shift = 0
+                run = Run(unix_time(line, shift), get_next_word(line, "Team:"))
+            elif "Difficulty:" in line and run:
+                run.add_diff(get_next_word(line, "Difficulty:"))
+            elif "paused" in line:
+                st_shift = unix_time(line, shift)
+            elif "resumed" in line:
+                shift += unix_time(line, shift) - st_shift
+        except ValueError:
+            reset = True
 
-    return floors
+    return data
 
-def time_between_actions(lines, word1, word2, start_line=0):
-    time1, time2 = None, None
-    last_index = start_line
 
-    for i in range(start_line, len(lines)):
-        line = lines[i]
-        parts = line.split(" - ")
-        if len(parts) < 2:
+
+TEAMS = ["BURN", "BLEED", "TREMOR", "RUPTURE", "SINKING", "POISE", "CHARGE"]
+MODES = ["NORMAL", "HARD"]
+
+def format_time(total_seconds):
+    if total_seconds is None:
+        return "none"
+    total_seconds = round(total_seconds)
+    minutes = total_seconds // 60
+    seconds = total_seconds % 60
+    return f"{int(minutes):02d}:{int(seconds):02d}"
+
+def export_to_csv(data, filename):
+    modes_data = {}
+    for run in data:
+        if not run.team or not run.diff:
             continue
-
-        timestamp_str = parts[0]
-        timestamp = timestamp_str.replace(",", ".")
-
-        if word1 in line and time1 is None:
-            time1 = timestamp
-
-        if word2 in line and time1 is not None:
-            time2 = timestamp
-            last_index = i + 1
-            break
-
-    if time1 and time2:
-        h1, m1, s1 = map(float, time1.split(" ")[1].split(":"))
-        h2, m2, s2 = map(float, time2.split(" ")[1].split(":"))
-        return (h2 * 3600 + m2 * 60 + s2) - (h1 * 3600 + m1 * 60 + s1), last_index
-
-    return None, last_index
-
-def av_time(lines, word1, word2):
-    total_time = 0
-    count = 0
-    start_line = 0
-
-    while True:
-        time_diff, start_line = time_between_actions(lines, word1, word2, start_line)
-        if time_diff is None:
-            break
-
-        total_time += time_diff
-        count += 1
-
-    avg = total_time / count if count > 0 else 0
-    return avg, count
-
-def format_time(seconds):
-    seconds = seconds or 0
-    minutes = int(seconds // 60)
-    sec = int(seconds % 60)
-    return f"{minutes}:{sec:02d}"
-
-def parse_runs(lines):
-    run_times = []
-    failed_time = 0
-    failure_count = 0
-
-    current_run_start = None
-
-    for i, line in enumerate(lines):
-        if "Iteration" in line:
-            timestamp = get_timestamp(line)
-            current_run_start = timestamp
-        elif "Completed" in line and current_run_start is not None:
-            run_end = get_timestamp(line)
-            run_times.append(run_end - current_run_start)
-            current_run_start = None
-        elif "Failed" in line and current_run_start is not None:
-            run_end = get_timestamp(line)
-            failed_time += run_end - current_run_start
-            failure_count += 1
-            current_run_start = None
-
-    return run_times, failed_time, failure_count
-
-def get_timestamp(line):
-    parts = line.split(" - ")
-    if len(parts) < 2:
-        return 0
-    timestamp_str = parts[0].replace(",", ".")
-    h, m, s = map(float, timestamp_str.split(" ")[1].split(":"))
-    return h * 3600 + m * 60 + s
-
-def floor_total_times(lines):
-    floors = {}
-    current_floor = None
-    floor_start_time = None
-    for i, line in enumerate(lines):
-        match = re.search(r"Floor (\d+)", line)
-        if match:
-            if current_floor is not None and floor_start_time is not None:
-                floor_end_time = get_timestamp(line)
-                if current_floor not in floors:
-                    floors[current_floor] = []
-                floors[current_floor].append(floor_end_time - floor_start_time)
-            current_floor = int(match.group(1))
-            floor_start_time = get_timestamp(line)
-        elif "Iteration" in line or "Completed" in line or "Failed" in line:
-            if current_floor is not None and floor_start_time is not None:
-                end_time = get_timestamp(line)
-                if current_floor not in floors:
-                    floors[current_floor] = []
-                floors[current_floor].append(end_time - floor_start_time)
-                current_floor = None
-                floor_start_time = None
-    return floors
-
-
-def export():
-    import csv
-    with open("dungeon_stats.csv", "w", newline="") as csvfile:
-        writer = csv.writer(csvfile)
-
-        # 1. Floor Fight Statistics
-        writer.writerow(["Floor Fight Statistics"])
-        writer.writerow(["Floor", "Fight Type", "Avg Time", "Count"])
-        for floor in sorted(floors_data.keys()):
-            lines_floor = floors_data[floor]
-            for fight in fight_types:
-                avg, count = av_time(lines_floor, fight, "over")
-                writer.writerow([floor, fight, format_time(avg), count])
-
-        writer.writerow([])
-
-        # 2. Floor Time Summary
-        writer.writerow(["Floor Time Summary"])
-        writer.writerow(["Floor", "Avg Time", "Count"])
-        for floor in sorted(floor_times.keys()):
-            total = sum(floor_times[floor])
-            avg = total / len(floor_times[floor])
-            writer.writerow([floor, format_time(avg), len(floor_times[floor])])
-
-        writer.writerow([])
-
-        # 3. Run Summary
-        writer.writerow(["Run Summary"])
-        writer.writerow(["Successful Runs", "Avg Run Time", "Failed Runs", "Total Time Wasted"])
-        writer.writerow([len(run_times), format_time(avg_run_time), failed_count, format_time(failed_total_time)])
-    print("\nSuccessfully exported to dungeon_stats.csv")
+        if run.diff not in modes_data:
+            modes_data[run.diff] = {}
+        if run.team not in modes_data[run.diff]:
+            modes_data[run.diff][run.team] = []
+        modes_data[run.diff][run.team].append(run)
+    
+    with open(filename, 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile, delimiter=',')
+        
+        for mode in MODES:
+            if mode not in modes_data:
+                continue
+            
+            writer.writerow([mode])
+            writer.writerow([])
+            
+            for team in TEAMS:
+                if team not in modes_data[mode]:
+                    continue
+                runs = modes_data[mode][team]
+            
+                writer.writerow([team])
+                writer.writerow([])
+                
+                total_times = []
+                for run in runs:
+                    if run.time is not None:
+                        total_times.append(run.time)
+                if total_times:
+                    avg_total = sum(total_times) / len(total_times)
+                    avg_total_str = format_time(avg_total)
+                else:
+                    avg_total_str = "none"
+                
+                writer.writerow(["Avg Time", "Count"])
+                writer.writerow([avg_total_str, len(runs)])
+                writer.writerow([])
+                
+                battle_types = ["Normal", "Focused", "Risky", "Miniboss", "Boss"]
+                writer.writerow(["Fights"] + battle_types + ["Total"])
+                
+                for floor_num in range(1, 6):
+                    battle_times = {bt: [] for bt in battle_types}
+                    floor_total_times = []
+                    
+                    for run in runs:
+                        if floor_num in run.floors:
+                            floor = run.floors[floor_num]
+                            if floor.time is not None:
+                                floor_total_times.append(floor.time)
+                            for bt in battle_types:
+                                battle_list = floor.battles.get(bt, [])
+                                if battle_list:
+                                    battle_times[bt].extend(battle_list)
+                    
+                    if floor_total_times:
+                        avg_floor_total = sum(floor_total_times) / len(floor_total_times)
+                        avg_floor_total_str = format_time(avg_floor_total)
+                    else:
+                        avg_floor_total_str = "none"
+                    
+                    row = [f"Floor{floor_num}"]
+                    for bt in battle_types:
+                        times = battle_times[bt]
+                        if times:
+                            avg_bt = sum(times) / len(times)
+                            row.append(format_time(avg_bt))
+                        else:
+                            row.append("none")
+                    row.append(avg_floor_total_str)
+                    writer.writerow(row)
+                
+                writer.writerow([])
+                
+                pack_data = {}
+                for run in runs:
+                    for floor_num in range(1, 6):
+                        if floor_num in run.floors:
+                            floor = run.floors[floor_num]
+                            if floor.pack is not None and floor.time is not None:
+                                pack_name = floor.pack
+                                pack_data.setdefault(pack_name, []).append(floor.time)
+                
+                if pack_data:
+                    pack_avg = {pack: sum(times)/len(times) for pack, times in pack_data.items()}
+                    sorted_packs = sorted(pack_avg.keys(), key=lambda x: pack_avg[x])
+                    writer.writerow(["Packs"] + sorted_packs)
+                    writer.writerow(["Avg Time"] + [format_time(pack_avg[pack]) for pack in sorted_packs])
+                    writer.writerow(["Count"] + [len(pack_data[pack]) for pack in sorted_packs])
+                else:
+                    writer.writerow(["Packs"])
+                    writer.writerow(["Avg Time"])
+                    writer.writerow(["Count"])
+                
+                writer.writerow([])
 
 
-if __name__ == "__main__":
-    with open(file, "r") as f:
-        lines = f.readlines()
+def log_to_csv():
+    if getattr(sys, 'frozen', False):
+        base_path = os.path.dirname(sys.executable)
+    else:
+        base_path = os.path.abspath(os.path.join(os.path.dirname(__file__)))
+    lines = process_log_file(f"{base_path}/game.log")
+    data = build_data(lines)
+    export_to_csv(data, f"{base_path}/game.csv")
 
-    floors_data = parse_floors(file)
-    fight_types = ["Normal", "Focused", "Risky", "Miniboss", "Boss"]
 
-    print("📊 Floor Fight Statistics", end="")
-    for floor in sorted(floors_data.keys()):
-        print(f"\n🧱 Floor {floor}")
-        lines_floor = floors_data[floor]
-        print(f"{'Type':<9} | {'Avg Time':^10} | {'Count':^5}")
-        print("-" * 32)
-        for fight in fight_types:
-            avg, count = av_time(lines_floor, fight, "over")
-            print(f"{fight:<9} | {format_time(avg):^10} | {count:^5}")
-
-    print("\n📦 Floor Time Summary")
-    print(f"{'Floor':^6}| {'Avg Time':^8} | {'Count':^5}")
-    print("-" * 26)
-    floor_times = floor_total_times(lines)
-    for floor in sorted(floor_times.keys()):
-        total = sum(floor_times[floor])
-        avg = total / len(floor_times[floor])
-        print(f"{floor:^6}| {format_time(avg):^8} | {len(floor_times[floor]):^5}")
-
-    print("\n🏁 Run Summary")
-    run_times, failed_total_time, failed_count = parse_runs(lines)
-    avg_run_time = sum(run_times) / len(run_times) if run_times else 0
-    print(f"{'Successful Runs':^15} | {'Avg Run Time':^12} | {'Failed Runs':^11} | {'Total Time Wasted':^17} ")
-    print("-" * 64)
-    print(f"{len(run_times):^15} | {format_time(avg_run_time):^12} | {failed_count:^11} | {format_time(failed_total_time):^17}")
-    #export()
+# print(get_next_word("2025-07-06 18:52:35,809 - INFO - Team: BLEED", "Team:"))

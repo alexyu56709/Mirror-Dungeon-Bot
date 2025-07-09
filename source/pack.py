@@ -114,7 +114,11 @@ def pack(level):
     time.sleep(0.4)
 
     skips = 3
-    card_count = len(LocateRGB.locate_all(PTH["PackCard"], conf=0.85))
+    box = LocateGray.locate(PTH["PackCard"], region=REG["PackCard"])
+    if box is None:
+        card_count = 5
+    else:
+        card_count = 5 - ((gui.center(box)[0] - 56) // 157)
     offset = (5 - card_count)*161
     regions = [(182 + offset + 322 * i, 280, 291, 624) for i in range(card_count)]
 

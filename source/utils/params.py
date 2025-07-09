@@ -1,6 +1,6 @@
 import threading
 
-V = "2.0.2"
+V = "2.1.0"
 
 SELECTED = ["YISANG", "DONQUIXOTE" , "ISHMAEL", "RODION", "SINCLAIR", "GREGOR"]
 GIFTS = dict()

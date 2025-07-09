@@ -139,6 +139,38 @@ def find_skill3(background, known_rgb, threshold=40, min_pixels=10, max_pixels=1
 
     return filtered
 
+def select_team():
+    time.sleep(1)
+
+    affinity = p.TEAM.lower()
+    if LocateGray.check(PTH[f"{affinity}_current"], region=REG["current_team"], conf=0.92, method=cv2.TM_SQDIFF_NORMED, wait=False):
+        return
+    
+    if now_rgb.button("arrow", conf=0.7):
+        win_moveTo(191, 472)
+        win_dragTo(289, 884)
+        time.sleep(1)
+
+    for i in range(4):
+        coords = [gui.center(box) for box in LocateGray.locate_all(PTH[f"{affinity}_team"], region=REG["teams"], threshold=7, conf=0.85)]
+        sorted(coords, key=lambda coord: coord[1])
+
+        if coords:
+            if i != 0 and i != 3: gui.mouseUp()
+            win_click(coords[0])
+            break
+        elif i != 3:
+            if i != 0: gui.mouseUp()
+            win_moveTo(196, 670)
+            gui.mouseDown()
+            win_moveTo(193, 400, duration=0.3)
+            if i == 2: gui.mouseUp()
+            time.sleep(0.3)
+    else:
+        logging.info("Team selecton failed!")
+        return
+    logging.info(f"Selected {p.TEAM}")
+    time.sleep(1)
 
 def select(sinners):
     selected = [gui.center(box) for box in LocateGray.locate_all(PTH["selected"])]
@@ -216,7 +248,10 @@ def fight(lux=False):
     is_tobattle = now.button("TOBATTLE")
     is_battle   = now.button("winrate")
     if not is_tobattle and not is_battle: return False
-    if is_tobattle: select(p.SELECTED)
+    if is_tobattle:
+        win_moveTo(1714, 940)
+        if lux: select_team()
+        select(p.SELECTED)
 
     print("Entered Battle")
     last_error = 0

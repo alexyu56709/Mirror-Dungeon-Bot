@@ -2,6 +2,8 @@ import sys, os, datetime, json, hashlib
 import source.utils.params as p
 import Bot
 
+from stats import log_to_csv
+
 os.environ['QT_LOGGING_RULES'] = 'qt.qpa.*=false'
 
 from PyQt6.QtWidgets import QApplication, QWidget, QPushButton, QLineEdit, QLabel, QGraphicsOpacityEffect, QMessageBox, QLayout, QHBoxLayout, QVBoxLayout, QScrollArea, QComboBox
@@ -51,6 +53,9 @@ class SettingsManager:
         teams = self.data.get("TEAMS", {})
         return teams.get(str(key), [])
     
+    def get_aff(self):
+        return self.data.get("AFFINITY", {})
+    
     def get_config(self, key):
         config = self.data.get(self.config, {})
         return config.get(str(key), [])
@@ -64,6 +69,10 @@ class SettingsManager:
             self.data["TEAMS"] = {}
 
         self.data["TEAMS"][str(key)] = value_list
+        self.save_settings()
+
+    def save_aff(self, state):
+        self.data["AFFINITY"] = state
         self.save_settings()
 
     def save_config(self, key, value_list):
@@ -271,15 +280,13 @@ class BotWorker(QObject):
     error = pyqtSignal(str)
     warning = pyqtSignal(str)
 
-    def __init__(self, is_lux, count, count_exp, count_thd, affinity, sinners, priority, avoid, log, bonus, restart, altf4, enkephalin, skip, hard, app):
+    def __init__(self, is_lux, count, count_exp, count_thd, teams, avoid, log, bonus, restart, altf4, enkephalin, skip, hard, app):
         super().__init__()
         self.is_lux = is_lux
         self.count = count
         self.count_exp = count_exp
         self.count_thd = count_thd
-        self.affinity = affinity
-        self.sinners = sinners
-        self.priority = priority
+        self.teams = teams
         self.avoid = avoid
         self.log = log
         self.bonus = bonus
@@ -297,9 +304,7 @@ class BotWorker(QObject):
                 self.count,
                 self.count_exp,
                 self.count_thd,
-                self.affinity,
-                self.sinners,
-                self.priority,
+                self.teams,
                 self.avoid,
                 self.log,
                 self.bonus,
@@ -361,14 +366,17 @@ class CustomButton(QPushButton):
         if 'filter' in self.config:
             self.event_filter = bool(self.config['filter'])
 
-    def _setup_glow_effect(self, geometry: tuple):
+    def _setup_glow_effect(self, geometry: tuple, enable_hover=True):
+        if hasattr(self, 'glowImage') and self.glowImage:
+            self.glowImage.deleteLater()
+        
         self.glowImage = QLabel(self.parentWidget())
         
         if self.config['glow'] not in self._glow_cache:
             self._glow_cache[self.config['glow']] = QPixmap(self.config['glow'])
         
         pixmap = self._glow_cache[self.config['glow']].scaled(
-            geometry[2], geometry[3], 
+            geometry[2], geometry[3],
             Qt.AspectRatioMode.IgnoreAspectRatio,
             Qt.TransformationMode.SmoothTransformation
         )
@@ -390,7 +398,10 @@ class CustomButton(QPushButton):
         self.animation.setStartValue(0.0)
         self.animation.setEndValue(1.0)
 
-        self.installEventFilter(self)
+        if enable_hover:
+            self.installEventFilter(self)
+        elif hasattr(self, 'event_filter'):
+            self.removeEventFilter(self)
 
     def eventFilter(self, obj, event):
         if not self.event_filter:
@@ -459,6 +470,29 @@ class CustomButton(QPushButton):
         super().resizeEvent(event)
         if self.glowImage and 'glow_geometry' not in self.config:
             self.glowImage.setGeometry(self.geometry())
+
+    def set_glow_image(self, image_path, geometry=None):
+        if hasattr(self, 'glowImage') and self.glowImage:
+            self.glowImage.deleteLater()
+        
+        self.config['glow'] = image_path
+        
+        if geometry:
+            x, y, _, _ = self.config['geometry']
+            self.config['glow_geometry'] = (geometry[0] + x, geometry[1] + y, geometry[2], geometry[3])
+        elif 'glow_geometry' in self.config:
+            del self.config['glow_geometry']
+        
+        if 'glow_geometry' in self.config:
+            self._setup_glow_effect(self.config['glow_geometry'], enable_hover=False)
+        else:
+            self._setup_glow_effect(self.config['geometry'], enable_hover=False)
+    
+    @staticmethod
+    def glow_multiple(buttons):
+        for button in buttons:
+            if isinstance(button, CustomButton):
+                button.trigger_glow_once()
     
 class MyApp(QWidget):
     def __init__(self):
@@ -566,7 +600,7 @@ class MyApp(QWidget):
 
         self.config = QLabel(self)
         self.config.setPixmap(QPixmap(Bot.APP_PTH["config"]))
-        self.config.setGeometry(0, 93, 700, 692)
+        self.config.setGeometry(0, 93, 700, 693)
         self.config.hide()
 
         self.priority_team = QLabel(self.config)
@@ -582,6 +616,10 @@ class MyApp(QWidget):
         self.hard_conf.setPixmap(QPixmap(Bot.APP_PTH["hard_conf"]))
         self.hard_conf.setGeometry(228, 421, 169, 26)
         self.hard_conf.hide()
+        self.hard_conf2 = QLabel(self.config)
+        self.hard_conf2.setPixmap(QPixmap(Bot.APP_PTH["hard_conf2"]))
+        self.hard_conf2.setGeometry(87, 31, 149, 27)
+        self.hard_conf2.hide()
 
         self.lux = QLabel(self)
         self.lux.setPixmap(QPixmap(Bot.APP_PTH["Lux"]))
@@ -825,7 +863,7 @@ class MyApp(QWidget):
                 'checkable': True,
                 'checked': i == 0,
                 'click_handler': self.activate_permanent_button,
-                'icon': Bot.APP_PTH['affinity']
+                'icon': Bot.APP_PTH['affinity'],
             }) for i in range(7)
         ]
     
@@ -923,11 +961,16 @@ class MyApp(QWidget):
             }),
 
             'log': CustomButton(self, {
-                'geometry': (563, 29, 43, 40),
+                'geometry': (564, 29, 41, 40),
                 'checkable': True,
                 'checked': True,
                 'click_handler': self.update_button_icons,
                 'icon': Bot.APP_PTH['log_on']
+            }),
+            'csv': CustomButton(self, {
+                'geometry': (523, 35, 41, 28),
+                'click_handler': self.ask_csv,
+                'glow': Bot.APP_PTH['csv']
             }),
 
             'guide_icon': CustomButton(self, {
@@ -964,9 +1007,33 @@ class MyApp(QWidget):
         self.buttons['update'].hide()
         self.check_version()
 
-        self.set_selected_buttons(self.sinner_selections[0])
+        self.set_affinity()
+        self.set_selected_buttons(self.sinner_selections[self.affinity])
         self.set_buttons_active(sm.get_config(8))
         self.overlay.raise_()
+
+    def set_affinity(self):
+        # first 7 values - whether button is activated, last - aff index
+        state = sm.get_aff()
+        if state:
+            self.affinity = state["7"]
+            for i in range(7):
+                if state[str(i)]:
+                    self.buttons[f"affinity{i}"].setChecked(True)
+                    if i == self.affinity:
+                        self.buttons[f"affinity{i}"].setIcon(QIcon(Bot.APP_PTH["affinity"]))
+                    else:
+                        self.buttons[f"affinity{i}"].setIcon(QIcon(Bot.APP_PTH["affinity_support"]))
+                else:
+                    self.buttons[f"affinity{i}"].setChecked(False)
+                    self.buttons[f"affinity{i}"].setIcon(QIcon())
+    
+    def save_affinity(self):
+        state = dict()
+        for i in range(7):
+            state[str(i)] = self.buttons[f"affinity{i}"].isChecked()
+        state[str(7)] = self.affinity
+        sm.save_aff(state)
 
     def paintEvent(self, event):
         painter = QPainter(self)
@@ -982,9 +1049,11 @@ class MyApp(QWidget):
         if self.hard:
             self.set_buttons_active([False, True, False, False, False])
             self.hard_conf.show()
+            self.hard_conf2.show()
         else:
             self.set_buttons_active([False, True, False, False, True])
             self.hard_conf.hide()
+            self.hard_conf2.hide()
         self.set_buttons_active(sm.get_config(8))
 
     def set_lux(self):
@@ -1038,6 +1107,34 @@ class MyApp(QWidget):
             activated.append(self.buttons[f'on{i}'].isChecked())
         return activated
     
+    def ask_csv(self):
+        msg = QMessageBox(self)
+        msg.setIcon(QMessageBox.Icon.NoIcon)
+        msg.setWindowTitle("Get run stats")
+        msg.setText("Do you want to export your run data from game.log to game.csv?")
+        
+        msg.setStandardButtons(
+            QMessageBox.StandardButton.Yes | 
+            QMessageBox.StandardButton.No
+        )
+        
+        response = msg.exec()
+        
+        if response == QMessageBox.StandardButton.Yes:
+            self.get_csv()
+    
+    def get_csv(self):
+        try:
+            log_to_csv()
+        except FileNotFoundError:
+            msg = QMessageBox(self)
+            msg.setIcon(QMessageBox.Icon.Critical)
+            msg.setWindowTitle("Error")
+            msg.setText("File game.log is not found")
+            msg.setStandardButtons(QMessageBox.StandardButton.Ok)
+            msg.exec()
+
+    
     def set_buttons_active(self, states):
         on_buttons = [self.buttons[f'on{i}'] for i in range(5)]
         
@@ -1060,31 +1157,38 @@ class MyApp(QWidget):
         self.update_sinners()
         if self.is_lux:
             self.sinner_selections[self.affinity_lux + 7] = self.sinners
+            if sender != self.buttons[f"affinity{self.affinity_lux}"]:
+                self.buttons[f"affinity_lux{self.affinity_lux}"].setChecked(False)
+                self.buttons[f"affinity_lux{self.affinity_lux}"].setIcon(QIcon())
+                sender.setIcon(QIcon(Bot.APP_PTH['affinity']))
+            else:
+                sender.setChecked(True)
             for i in range(3):
-                if self.buttons[f"affinity_lux{i}"] != sender:
-                    self.buttons[f"affinity_lux{i}"].setChecked(False)
-                    self.buttons[f"affinity_lux{i}"].setIcon(QIcon())
-                else:
+                if self.buttons[f"affinity_lux{i}"] == sender:
                     self.affinity_lux = i
+                    break
         else:
             self.sinner_selections[self.affinity] = self.sinners
-            for i in range(7):
-                if self.buttons[f"affinity{i}"] != sender:
-                    self.buttons[f"affinity{i}"].setChecked(False)
-                    self.buttons[f"affinity{i}"].setIcon(QIcon())
+            null_visual_state = sender.icon().isNull()
+
+            if null_visual_state:
+                sender.setIcon(QIcon(Bot.APP_PTH['affinity']))
+                self.buttons[f"affinity{self.affinity}"].setIcon(QIcon(Bot.APP_PTH['affinity_support']))
+                for i in range(7):
+                    if self.buttons[f"affinity{i}"] == sender:
+                        self.affinity = i
+                        break
+            else:
+                if sender != self.buttons[f"affinity{self.affinity}"]:
+                    sender.setIcon(QIcon())
                 else:
-                    self.affinity = i
+                    sender.setChecked(True)
         if self.is_lux:
             self.set_selected_buttons(self.sinner_selections[self.affinity_lux + 7])
         else:
             self.priority_team.setPixmap(QPixmap(Bot.APP_PTH[f'team{self.affinity}']))
             self.reset_to_defaults(self.affinity, default=False)
             self.set_selected_buttons(self.sinner_selections[self.affinity])
-
-        if sender.isChecked():
-            sender.setChecked(True)
-            sender.setIcon(QIcon(Bot.APP_PTH['affinity']))
-            sender.setIconSize(sender.size())
 
     def update_button_icons(self):
         sender = self.sender()
@@ -1155,10 +1259,33 @@ class MyApp(QWidget):
             self.buttons['update'].start_flickering()
 
     def check_inputs(self):
-        if len(self.selected_button_order) < 6: return False
+        # if len(self.selected_button_order) < 6: return False
         if not self.is_lux and self.count == 0: return False
         if self.is_lux and (self.count_exp + self.count_thd) < 1: return False
         return True
+    
+    def check_sinners(self):
+        errors = []
+        # print(self.teams)
+        for team in self.teams.keys():
+            if len(self.teams[team]["sinners"]) < 6:
+                errors.append(team)
+        
+        if not errors: return True
+
+        # set up glows
+        frame = (9, 7, 55, 52)
+        for i in errors:
+            if i == self.affinity:
+                self.buttons[f'affinity{i}'].set_glow_image(Bot.APP_PTH["warn"], frame)
+            else:
+                self.buttons[f'affinity{i}'].set_glow_image(Bot.APP_PTH["warn_support"], frame)
+
+        # play it
+        CustomButton.glow_multiple(
+            [self.buttons[f'affinity{i}'] for i in errors]
+        )
+        return False
     
     def get_params(self):
         # MD count
@@ -1174,10 +1301,20 @@ class MyApp(QWidget):
         if text: self.count_thd = int(text)
         else: self.count_thd = 0
 
-        # selected sinners
+        # selected teams
+        self.teams = dict()
         self.update_sinners()
-
-        # priority and avoid are already set
+        self.sinner_selections[self.affinity] = self.sinners
+        if self.is_lux:
+            self.teams[self.affinity_lux] = {"sinners": self.sinners}
+        else:
+            for index in range(7):
+                i = (self.affinity + index) % 7
+                if self.buttons[f"affinity{i}"].isChecked():
+                    self.teams[i] = {
+                        "sinners": self.sinner_selections[i], 
+                        "priority": sm.get_config(str(i))
+                    }
 
         self.log = self.buttons['log'].isChecked()
         self.bonus, self.restart, self.altf4, self.enkephalin, self.skip = self.get_config_buttons()
@@ -1187,10 +1324,12 @@ class MyApp(QWidget):
 
     def start(self):
         self.get_params()
-        if not self.check_inputs():
+        if not self.check_inputs() or not self.check_sinners():
             self.buttons['guide_icon'].trigger_glow_once()
             return
+
         if self.buttons['update'].isVisible(): self.buttons['update'].pause_flickering()
+        self.save_affinity()
 
         self.progress.raise_()
         self.progress.show()
@@ -1205,9 +1344,7 @@ class MyApp(QWidget):
             self.count,
             self.count_exp,
             self.count_thd,
-            self.affinity,
-            self.sinners,
-            self.priority,
+            self.teams,
             self.avoid,
             self.log,
             self.bonus,

@@ -112,10 +112,12 @@ def get_connections():
     ]
     connections = []
     for i, image in enumerate(images):
+        paths = dict()
         for j, direction in enumerate(["up", "down"]):
-            if LocateGray.check(PTH[direction], image=image, conf=0.92, wait=False):
-                connections.append(((i % 2, (i//2) + 1 - j), (i % 2 + 1, (i//2) + j)))
-                break
+            paths[j] = LocateGray.get_conf(PTH[direction], image=image)
+        choice = max(paths, key=paths.get)
+        if paths[choice] >= 0.87:
+            connections.append(((i % 2, (i//2) + 1 - j), (i % 2 + 1, (i//2) + j)))
     return connections
 
 def check_connections(connections):
@@ -287,14 +289,20 @@ def move():
             return True
 
     # if we fail
-    win_click(429, 480 + adjust*320)
+    Danteh = find_danteh()
+    if Danteh is None: return False
+
+    win_click(Danteh)
     if enter(): return True
 
     # if we double fail:
     for i in range(3):
-        win_moveTo(gui.center((624, 101 + i * 275, 282, 275)))
-        gui.click()
-        if enter():
-            logging.info(f"Entering unknown node")
-            return True
+        x_click = int(Danteh[0] + 336)
+        y_click = int(Danteh[1] - 241 + i * 275)
+        if 57 <= x_click <= 1809 and 110 <= y_click <= 934:
+            win_moveTo(x_click, y_click)
+            gui.click()
+            if enter():
+                logging.info(f"Entering unknown node")
+                return True
     return False

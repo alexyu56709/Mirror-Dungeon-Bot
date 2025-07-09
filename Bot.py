@@ -1,5 +1,5 @@
 from source.utils.utils import *
-from source.battle import fight
+from source.battle import fight, select_team
 from source.event import event
 from source.pack import pack
 from source.move import move
@@ -22,11 +22,11 @@ start_locations = {
     "MD": 1, 
     "Start": 2, 
     "enterInvert": 3, 
-    "ConfirmTeam": 4, 
-    "enterBonus": 6, 
-    "Confirm.0": 11, 
-    "refuse": 12, 
-    "Confirm": 17
+    "ConfirmTeam": 5, 
+    "enterBonus": 7, 
+    "Confirm.0": 13, 
+    "refuse": 14, 
+    "Confirm": 19
 }
 
 def dungeon_start():
@@ -34,7 +34,8 @@ def dungeon_start():
         Action("Drive"),
         Action("MD"),
         Action("Start"),
-        Action("enterInvert"),
+        Action("enterInvert", ver="ConfirmTeam"),
+        select_team,
         Action("ConfirmTeam", ver="enterBonus"),
         lambda: time.sleep(0.2),
 
@@ -43,7 +44,8 @@ def dungeon_start():
         ClickAction((966, 381), ver="money!"),
         ClickAction((1241, 381), ver="money!"),
 
-        Action("enterBonus"),
+        Action("enterBonus", ver="Confirm.0"),
+        lambda: now_click.button("starlight"),
         Action("Confirm.0", ver="refuse"),
 
         Action(p.GIFTS["checks"][2], "StartEGO", ver="gifts!"),
@@ -274,16 +276,31 @@ if __name__ == "__main__":
 
 
 # when App is run:
-def execute_me(is_lux, count, count_exp, count_thd, affinity, sinners, priority, avoid, log, bonus, restart, altf4, enkephalin, skip, hard, app, warning):
-    p.HARD = hard
-    if hard:
+def rotate(lst):
+    index = 0
+    while True:
+        yield lst[index]
+        index = (index + 1) % len(lst)
+
+
+def set_team(affinity, teams):
+    if p.HARD:
         p.TEAM = list(HARD.keys())[affinity]
         p.GIFTS = HARD[p.TEAM]
     else:
         p.TEAM = list(TEAMS.keys())[affinity]
         p.GIFTS = TEAMS[p.TEAM]
 
-    p.SELECTED = [list(SINNERS.keys())[i] for i in sinners]
+    p.SELECTED = [list(SINNERS.keys())[i] for i in list(teams[affinity]["sinners"])]
+    p.PICK = generate_packs(teams[affinity]["priority"])
+    logging.info(f'Team: {p.TEAM}')
+    
+    difficulty = "HARD" if p.HARD else "NORMAL"
+    logging.info(f'Difficulty: {difficulty}')
+
+
+def execute_me(is_lux, count, count_exp, count_thd, teams, avoid, log, bonus, restart, altf4, enkephalin, skip, hard, app, warning):
+    p.HARD = hard
     p.LOG = log
     p.BONUS = bonus
     p.RESTART = restart
@@ -301,16 +318,18 @@ def execute_me(is_lux, count, count_exp, count_thd, affinity, sinners, priority,
 
 
     if not is_lux:
-        p.PICK = generate_packs(priority)
+        rotator = rotate(list(teams.keys()))
         p.IGNORE = generate_packs(avoid)
-        print(p.PICK)
-        
         
         print(f"Grinding {count} mirrors...")
         print("Switch to Limbus Window")
         countdown(10)
-        
         logging.info('Script started')
+    else:
+        lux_list = ["SLASH", "PIERCE", "BLUNT"]
+        team_idx = list(teams.keys())[0]
+        p.TEAM = lux_list[team_idx]
+        p.SELECTED = [list(SINNERS.keys())[i] for i in list(teams[team_idx]["sinners"])]
 
     try:
         set_window()
@@ -320,6 +339,9 @@ def execute_me(is_lux, count, count_exp, count_thd, affinity, sinners, priority,
             return
 
         for i in range(count):
+            team = next(rotator)
+            set_team(team, teams)
+
             logging.info(f'Iteration {i}')
             completed = False
             while not completed:
