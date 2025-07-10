@@ -1,20 +1,20 @@
-<p align="center" style="margin: 0px">
-<a href="https://github.com/AlexWalp/Mirror-Dungeon-Bot/releases/latest/download/app.exe" style="text-decoration: none; display: inline-block;">
+<div align="center">
+<a href="https://github.com/AlexWalp/Mirror-Dungeon-Bot/releases/latest/download/app.exe">
   <img alt="Download" src="https://img.shields.io/badge/app.exe-Download-blue.svg">
 </a>
 <img alt="version" src="https://img.shields.io/github/v/release/AlexWalp/Mirror-Dungeon-Bot">
 <img alt="download" src="https://img.shields.io/github/downloads/AlexWalp/Mirror-Dungeon-Bot/total">
 <img alt="language" src="https://img.shields.io/badge/Language-Python-blue">
 <img alt="platform" src="https://img.shields.io/badge/platform-Windows-blue">
-</p>
-<p align="center" style="margin-bottom: 5px"> 
+</div>
+<div align="center"> 
 <a href="https://www.paypal.com/ncp/payment/98WFWFCUHLQML">
   <img src="https://img.shields.io/badge/Support-PayPal-blue.svg?logo=paypal" alt="PayPal Donate" />
 </a>
 <a href="https://github.com/sponsors/AlexWalp">
   <img src="https://img.shields.io/badge/Sponsor-%E2%9D%A4-lightgrey?logo=github" alt="GitHub Sponsors" />
 </a>
-</p>
+</div>
 <p align="center" > You can contact me on Discord: @walpth</p>
 
 ```
@@ -30,10 +30,7 @@
 
 ---
 
-<p align="center"> <img src="ImageAssets/readme/1.png"> </p>
-
-<!-- <div style="overflow: auto; margin-bottom: 20px;">
-  <img src="ImageAssets/readme/preview.png" width="450" style="float: left; margin-right: 40px;" />
+<img align="left" src="ImageAssets/readme/preview.png" width="55%">
 
   - ### ⚡ Speed
   A **Normal MD6** run lasts between **23-25 minutes**.
@@ -48,7 +45,8 @@
     Sometimes timings mess up, so in order to address this issue most bot actions are verified.
 
   - ### Supports Luxcavation grind
-</div> -->
+
+<br clear="left" />
 
 # Functionality:
 
@@ -62,40 +60,23 @@
   - Uses default team if it fails to find the right team
   ### Supported name examples:
 
-  <img align="center" src="ImageAssets/readme/team_names.png" width="100%">
+  <img src="ImageAssets/readme/team_names.png" width="100%">
 
 - ## Rotates teams
   - *Orange* - currently displayed team
   - *Blue* - other teams included in the rotation
-  - The rotation starts from the curretly displayed team and moves from left to right
+  - The rotation starts from the curretly displayed team and moves from left to right<br><br>
 
-  <img align="center" src="ImageAssets/readme/rotation.png" width="100%">
+  <img src="ImageAssets/readme/rotation.png" width="100%">
 
 - ## Supports all team builds
+  - **Normal MD:** Rupture is the fastest team with average time of 24 minutes per run.  
+  - **Hard MD:** Rupture is the best team with average time of 38 minutes per run. <br><br>
 
-  <p align="center"> <img src="ImageAssets/readme/2.png"> </p>
-  <!-- <div style="display: flex; justify-content: space-between;">
-    <div style="flex: 1; padding-right: 10px;">
-      <h3 style="margin-top: 0px;">Normal MD:</h3>
-      <ul style="padding-left: 20px;"> 
-        <li>Rupture is the fastest team with average time of <br> 24 minutes per run.</li>
-      </ul>
-    </div>
-
-    <div style="flex: 1; padding-left: 10px;">
-      <h3 style="margin-top: 0px;">Hard MD:</h3>
-      <ul style="padding-left: 20px;">
-        <li>Rupture is the best team with average time of <br> 38 minutes per run.</li>
-      </ul>
-    </div>
-  </div>
-<img src="ImageAssets/readme/team.png" alt="Team"> -->
+  <img src="ImageAssets/readme/team.png" alt="Team" width="100%">
 
 - ## Selects Floor Packs
-
-  <p align="center"> <img src="ImageAssets/readme/3.png"> </p>
-  <!-- <div style="overflow: auto; margin-bottom: 20px;">
-    <img src="ImageAssets/readme/config.png" width="450" style="float: left; margin-right: 40px;" />
+  <img align="left" src="ImageAssets/readme/config.png" width="55%">
 
     ### By default:
     - Avoids packs with high mortality rate and long fights such as:  
@@ -107,7 +88,8 @@
     ### You can set your own pack priority in config!
     - ***Important note: Prioritized packs are specific to each team type, but Avoided packs apply globally to all teams.***
     - ***There are two different configs for Normal MD and Hard MD***
-  </div> -->
+
+  <br clear="left" />
 
 - ## Selects the best next node
   ### Bot can detect:
@@ -126,41 +108,40 @@
   - Winrates focused encounters.
   - Chains skills 1 and 2 for human encounters. 
   - Skill 3 animations take more time than necessary so it is best to avoid it.
-  - Doesn't use any EGO, because it is a huge time waste.
+  - Doesn't use any EGO, because it is a huge time waste.<br><br>
 
-  <img align="center" src="ImageAssets/readme/skills.gif"  width='100%' />
+  <img src="ImageAssets/readme/skills.gif"  width='100%' />
 
   ### Hard MD:
   - **All battles** are winrated.
   - If the clash is **Struggling** or **Hopeless**, the bot uses the leftmost available EGO.
-  - If the clash is **Struggling/Hopeless** and an EGO is selected, it will be replaced with a defense skill.
+  - If the clash is **Struggling/Hopeless** and an EGO is selected, it will be replaced with a defense skill.<br><br>
   
-  <img align="center" src="ImageAssets/readme/ego.gif" width='100%' />
+  <img src="ImageAssets/readme/ego.gif" width='100%' />
 
 - ## Fuses EGO gifts
 
-  <p align="center"> <img src="ImageAssets/readme/4.png"> </p>
+  <img align="left" src="ImageAssets/readme/gifts.png" width="49%">
 
-<!-- <div style="overflow: auto; margin-bottom: 20px;">
-<img style="float: left; margin-left: 40px; margin-right: 80px;" src="ImageAssets/readme/gifts.png" width="40%" />
+  ### Makes a good team affinity build in shop
+    - Fuses gifts to get powerful Tier 4s.
+    - Upties and buys affinity-related gifts.
+    - If not all gifts are visible, it can **scroll through inventory** while fusing.
+    <br><br>
 
- ### Makes a good team affinity build in shop
-  - Fuses gifts to get powerful Tier 4s.
-  - Upties and buys affinity-related gifts.
-  - If not all gifts are visible, it can **scroll through inventory** while fusing.
-  <br><br>
+    **If no tier 4 in inventory:**
+    - The bot aggressively fuses the **first Tier 4 gift**, even using same-affinity gifts if needed.
+    <br><br>
 
-  **If no tier 4 in inventory:**
-  - The bot aggressively fuses the **first Tier 4 gift**, even using same-affinity gifts if needed.
-  <br><br>
+    **Once the first build-related Tier 4 gift is obtained:**
+    - Same-affinity gifts will **no longer be used for fusing**.
+    <br><br>
 
-  **Once the first build-related Tier 4 gift is obtained:**
-  - Same-affinity gifts will **no longer be used for fusing**.
-  <br><br>
+    **Once the affinity build is complete:**
+    - The bot will browse the shop for **same-affinity gifts** and buy them when found.
 
-  **Once the affinity build is complete:**
-  - The bot will browse the shop for **same-affinity gifts** and buy them when found.
-</div> -->
+  <br clear="left" />
+
 
 # Video showcase (old version 1.0.3):
 <p align="center">
@@ -171,14 +152,9 @@
 
 # User warning!
 
-<p align="center"> <img src="ImageAssets/readme/5.png"> </p>
+This tool does not modify or access any game files and relies solely on the displayed information. <br> There have been no precedents of bans due to using this or similar tools, but I advise against excessive usage for longer than what is humanly possible. <br> I also advise against sharing your in-game ID along with the fact that you use this tool. | 
+--- | 
 
-<!-- <div style="; border: 2px solid red; padding-left: 20px; padding-right: 20px; padding-top: 15px; border-radius: 5px;">
-
-This tool does not modify or access any game files and relies solely on the displayed information. <br> 
-There have been no precedents of bans due to using this or similar tools, but I advise against excessive usage for longer than what is humanly possible. <br>
-I also advise against sharing your in-game ID along with the fact that you use this tool.
-</div> -->
 
 # Installation
 ### 📦 Option 1: Run the Prebuilt Executable 
@@ -200,50 +176,38 @@ Then you can run `App.py` for GUI interface or run `Bot.py` for cmd input withou
 
 # Usage:
 
-<p align="center"> <img src="ImageAssets/readme/6.png"></p>
+> **Game interface must be in English!** <br> **Make sure that the Limbus Company window is fully visible!** <br> Set the in-game resolution to **16:9** ratio (**1920x1080** is best, but **1280x720** also works)
 
-
-<!-- <div style="; border: 2px solid orange; padding: 10px; padding-bottom: 0px; border-radius: 5px; margin-bottom: 10px;">
-  <strong>Game interface must be in English!</strong><br>
-  <strong>Make sure that the Limbus Company window is fully visible!</strong><br>
-  <p>Set the in-game resolution to <strong>16:9</strong> ratio (<strong>1920x1080</strong> is best, but <strong>1280x720</strong> also works)</p>
-</div> -->
 
 - You can set up sinners and other settings upon program execution. ChargeGrinder will start running in 10 seconds after that. 
 - In the meantime you should switch to the Limbus Company window. It is not recommended to move the mouse while the bot is running, but you can Alt+Tab to another window and the bot will pause.
 
 # Recommended Graphics Settings:
 
-<p align="center"> <img src="ImageAssets/readme/7.png"> </p>
+<img align="left" src="ImageAssets/readme/fullscreen.png" width="62%">
+<h3>1920x1080</h3>
 
-<!-- <div style="overflow: auto; margin-bottom: 20px;">
-<img style="float: left; margin-left: 0px; margin-right: 40px; " src="ImageAssets/readme/fullscreen.png" width="500px" />
+- Provides the best detection result
+- If your screen is Full HD or lower with a 16:9 aspect ratio, use Fullscreen at your screen's native resolution
+- If your screen resolution is higher than Full HD, use Windowed instead
 
-<h3 style="margin-top: 0px;">1920x1080</h3>
+<br clear="left" />
 
-  - Provides the best detection result
-  - If your screen is Full HD or lower with a 16:9 aspect ratio, use Fullscreen at your screen's native resolution
-  - If your screen resolution is higher than Full HD, use Windowed instead
-</div>
+<img align="left" src="ImageAssets/readme/windowed.png" width="62%">
+<h3>1280x720</h3>
 
-<div style="overflow: auto; margin-bottom: 20px;">
-<img style="float: left; margin-left: 0px; margin-right: 40px;" src="ImageAssets/readme/windowed.png" width="500px" />
+- The resolution I usually test new versions with (and mostly use)
+- Use windowed mode only
 
-<h3 style="margin-top: 0px;">1280x720</h3>
-
-  - The resolution I usually test new versions with (and mostly use)
-  - Use windowed mode only
-</div> -->
+<br clear="left" />
 
 # Run stats
 
-<img src="ImageAssets/readme/8.png">
+<img align="left" src="ImageAssets/readme/export.png" width="11%">
 
-<!-- <div style="overflow: auto; margin-bottom: 20px;">
-<img style="float: left; margin-left: 0px; margin-right: 40px;" src="ImageAssets/readme/export.png" width="120px" />
+### You can export run data from game.log file to game.csv
 
-<h3 style="margin-top: 12px;">You can export run data from game.log file to game.csv</h3>
-</div> -->
+<br clear="left" />
 
 ### Example game.csv:
 | NORMAL     | BURN |
