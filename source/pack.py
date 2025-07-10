@@ -127,6 +127,19 @@ def pack(level):
     # import random
     # id = random.choice([i for i in range(card_count)])
 
+    # if level == 5: # new pack search
+    #     logging.info("Execution paused")
+    #     win_click(1349, 64)
+    #     time.sleep(5)
+    #     cv2.imwrite(f"choices/pack{int(time.time())}.png", screenshot())
+    #     for _ in range(3):
+    #         win_click(1617, 62)
+    #         win_moveTo(1721, 999)
+    #         time.sleep(5)
+    #         cv2.imwrite(f"choices/pack{int(time.time())}.png", screenshot())
+    #     win_click(1349, 64)
+    #     time.sleep(1)
+    #     logging.info("Execution resumed")
 
     for skip in range(skips + 1):
         time.sleep(0.2)

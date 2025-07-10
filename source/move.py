@@ -115,8 +115,8 @@ def get_connections():
         paths = dict()
         for j, direction in enumerate(["up", "down"]):
             paths[j] = LocateGray.get_conf(PTH[direction], image=image)
-        choice = max(paths, key=paths.get)
-        if paths[choice] >= 0.87:
+        j = max(paths, key=paths.get)
+        if paths[j] >= 0.87:
             connections.append(((i % 2, (i//2) + 1 - j), (i % 2 + 1, (i//2) + j)))
     return connections
 

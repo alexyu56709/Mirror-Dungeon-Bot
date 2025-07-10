@@ -36,7 +36,7 @@ REG = {
     "resume"         : ( 794,  567,  336,   63),
     "enterInvert"    : ( 943,  669,  382,  106),
     "ConfirmTeam"    : (1593,  830,  234,   90),
-    "enterBonus"     : (1566,  974,  266,   89),
+    "enterBonus"     : (1702,  957,  166,   85),
     "starlight"      : (1069,  525,   42,   42),
     "refuse"         : (1181,  818,  295,  124),
     "StartEGO"       : ( 198,  207,  937,  682),
@@ -226,7 +226,7 @@ HARD_FLOORS = {
         'TyrannicalPride', 'SunkGloom', 'ExcessiveGluttony', 'InertSloth', 'TanglingLust', 
         'UnboundWrath', 'toClaimTheirBonesBokGak', 'MiracleinDistrict20BokGak', 'Line4', 'Line3',
         'TheInfiniteProcession', 'TheHeartbreaking', 'LaManchalandReopening', 'TheEvilDefining',
-        'TheUnchanging'
+        'TheUnchanging', 'FourHousesandGreed', 'Line5', 'TheSurrenderedWitnessing', 'TheDreamEnding'
     ]
 }
 
@@ -234,7 +234,8 @@ HARD_BANNED = [
     "TheNoonofViolet", "MurderontheWARPExpress", "FullStoppedbyaBullet", "TimekillingTime", 
     "NocturnalSweeping", 'Line4', 'Line3', 'toClaimTheirBonesBokGak', 'TheEvilDefining', 
     'SinkingDeluge', 'PoisedBreathing', 'InertSloth', 'EmotionalFlood', 'CrawlingAbyss', 
-    'TreadwheelSloth', 'VainPride', 'PitifulEnvy', 'TyrannicalPride', 'UnrelentingMight'
+    'TreadwheelSloth', 'VainPride', 'PitifulEnvy', 'TyrannicalPride', 'UnrelentingMight', 
+    'Line5', 'TheSurrenderedWitnessing', 'TheDreamEnding'
 ]
 
 

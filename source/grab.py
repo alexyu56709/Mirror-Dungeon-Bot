@@ -45,7 +45,7 @@ def get_gift(image, owned_x):
 
 def grab_EGO():
     if not now.button("EGObin"): return False
-    time.sleep(0.4)
+    time.sleep(0.8)
 
     owned_x = [p[0] + p[2] for p in LocateRGB.locate_all(PTH["Owned"], region=REG["Owned"])]
     image = screenshot(region=REG["EGO"])

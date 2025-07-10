@@ -3,7 +3,7 @@ from source.event import event
 import source.utils.params as p
 
 
-exit_if = ["loading", "Move", "EGObin", "encounterreward", "victory", "defeat"]
+exit_if = ["loading", "Move", "EGObin", "encounterreward", "victory", "defeat", "PackChoice"]
 
 sins = { # bgr values
     "wrath"   : (  0,   0, 254),

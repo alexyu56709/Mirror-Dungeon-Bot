@@ -23,10 +23,10 @@ start_locations = {
     "Start": 2, 
     "enterInvert": 3, 
     "ConfirmTeam": 5, 
-    "enterBonus": 7, 
-    "Confirm.0": 13, 
-    "refuse": 14, 
-    "Confirm": 19
+    "enterBonus": 10, 
+    "Confirm.0": 16, 
+    "refuse": 17, 
+    "Confirm": 22
 }
 
 def dungeon_start():
@@ -36,7 +36,10 @@ def dungeon_start():
         Action("Start"),
         Action("enterInvert", ver="ConfirmTeam"),
         select_team,
-        Action("ConfirmTeam", ver="enterBonus"),
+        lambda: try_click.button("ConfirmTeam"),
+        lambda: time.sleep(0.5),
+        lambda: now_click.button("ConfirmInvert"),
+        lambda: wait_for_condition(lambda: not now.button("enterBonus")),
         lambda: time.sleep(0.2),
 
         ClickAction((401, 381), ver="money!"),

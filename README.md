@@ -34,8 +34,8 @@
   <img src="ImageAssets/readme/preview.png" width="450" style="float: left; margin-right: 40px;" />
 
   - ### ⚡ Speed
-  A **Normal MD6** run lasts between **20–25 minutes** for a Burn team. <br>
-  And it takes **35–45 minutes** for one **Hard MD** run with a Rupture team
+  A **Normal MD6** run lasts between **23-25 minutes**.
+  And it takes **35-45 minutes** for one **Hard MD** run with a Rupture team.
 
   - ### Starts from any moment of MD exploration
 
@@ -74,19 +74,18 @@
     <div style="flex: 1; padding-right: 10px;">
       <h3 style="margin-top: 0px;">Normal MD:</h3>
       <ul style="padding-left: 20px;"> 
-        <li>Burn is the fastest team with average time of <br> 22 minutes per run.</li>
+        <li>Rupture is the fastest team with average time of <br> 24 minutes per run.</li>
       </ul>
-      <img src="ImageAssets/readme/team.png" alt="Normal Team" width="100%">
     </div>
 
     <div style="flex: 1; padding-left: 10px;">
       <h3 style="margin-top: 0px;">Hard MD:</h3>
       <ul style="padding-left: 20px;">
-        <li>Rupture is the best team with average time of <br> 40 minutes per run.</li>
+        <li>Rupture is the best team with average time of <br> 38 minutes per run.</li>
       </ul>
-      <img src="ImageAssets/readme/hard_team.png" alt="Hard Team" width="100%">
     </div>
   </div>
+<img src="ImageAssets/readme/team.png" alt="Team" width="100%">
 
 - ## Selects Floor Packs
 
