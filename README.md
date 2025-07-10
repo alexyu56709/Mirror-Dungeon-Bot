@@ -30,7 +30,9 @@
 
 ---
 
-<div style="overflow: auto; margin-bottom: 20px;">
+<p align="center"> <img src="ImageAssets/readme/1.png"> </p>
+
+<!-- <div style="overflow: auto; margin-bottom: 20px;">
   <img src="ImageAssets/readme/preview.png" width="450" style="float: left; margin-right: 40px;" />
 
   - ### ⚡ Speed
@@ -46,7 +48,7 @@
     Sometimes timings mess up, so in order to address this issue most bot actions are verified.
 
   - ### Supports Luxcavation grind
-</div>
+</div> -->
 
 # Functionality:
 
@@ -60,17 +62,19 @@
   - Uses default team if it fails to find the right team
   ### Supported name examples:
 
-<img align="center" src="ImageAssets/readme/team_names.png" width="100%">
+  <img align="center" src="ImageAssets/readme/team_names.png" width="100%">
 
 - ## Rotates teams
   - *Orange* - currently displayed team
   - *Blue* - other teams included in the rotation
   - The rotation starts from the curretly displayed team and moves from left to right
 
-<img align="center" src="ImageAssets/readme/rotation.png" width="100%">
+  <img align="center" src="ImageAssets/readme/rotation.png" width="100%">
 
 - ## Supports all team builds
-  <div style="display: flex; justify-content: space-between;">
+
+  <p align="center"> <img src="ImageAssets/readme/2.png"> </p>
+  <!-- <div style="display: flex; justify-content: space-between;">
     <div style="flex: 1; padding-right: 10px;">
       <h3 style="margin-top: 0px;">Normal MD:</h3>
       <ul style="padding-left: 20px;"> 
@@ -85,11 +89,12 @@
       </ul>
     </div>
   </div>
-<img src="ImageAssets/readme/team.png" alt="Team" width="100%">
+<img src="ImageAssets/readme/team.png" alt="Team"> -->
 
 - ## Selects Floor Packs
 
-  <div style="overflow: auto; margin-bottom: 20px;">
+  <p align="center"> <img src="ImageAssets/readme/3.png"> </p>
+  <!-- <div style="overflow: auto; margin-bottom: 20px;">
     <img src="ImageAssets/readme/config.png" width="450" style="float: left; margin-right: 40px;" />
 
     ### By default:
@@ -102,7 +107,7 @@
     ### You can set your own pack priority in config!
     - ***Important note: Prioritized packs are specific to each team type, but Avoided packs apply globally to all teams.***
     - ***There are two different configs for Normal MD and Hard MD***
-  </div>
+  </div> -->
 
 - ## Selects the best next node
   ### Bot can detect:
@@ -123,17 +128,20 @@
   - Skill 3 animations take more time than necessary so it is best to avoid it.
   - Doesn't use any EGO, because it is a huge time waste.
 
-  <img align="center" src="ImageAssets/readme/skills.gif" />
+  <img align="center" src="ImageAssets/readme/skills.gif"  width='100%' />
 
   ### Hard MD:
   - **All battles** are winrated.
   - If the clash is **Struggling** or **Hopeless**, the bot uses the leftmost available EGO.
   - If the clash is **Struggling/Hopeless** and an EGO is selected, it will be replaced with a defense skill.
   
-  <img align="center" src="ImageAssets/readme/ego.gif" />
+  <img align="center" src="ImageAssets/readme/ego.gif" width='100%' />
 
 - ## Fuses EGO gifts
-<div style="overflow: auto; margin-bottom: 20px;">
+
+  <p align="center"> <img src="ImageAssets/readme/4.png"> </p>
+
+<!-- <div style="overflow: auto; margin-bottom: 20px;">
 <img style="float: left; margin-left: 40px; margin-right: 80px;" src="ImageAssets/readme/gifts.png" width="40%" />
 
  ### Makes a good team affinity build in shop
@@ -152,7 +160,7 @@
 
   **Once the affinity build is complete:**
   - The bot will browse the shop for **same-affinity gifts** and buy them when found.
-</div>
+</div> -->
 
 # Video showcase (old version 1.0.3):
 <p align="center">
@@ -162,13 +170,15 @@
 </p>
 
 # User warning!
-<div style="; border: 2px solid red; padding-left: 20px; padding-right: 20px; padding-top: 15px; border-radius: 5px;">
+
+<p align="center"> <img src="ImageAssets/readme/5.png"> </p>
+
+<!-- <div style="; border: 2px solid red; padding-left: 20px; padding-right: 20px; padding-top: 15px; border-radius: 5px;">
 
 This tool does not modify or access any game files and relies solely on the displayed information. <br> 
 There have been no precedents of bans due to using this or similar tools, but I advise against excessive usage for longer than what is humanly possible. <br>
 I also advise against sharing your in-game ID along with the fact that you use this tool.
-
-</div>
+</div> -->
 
 # Installation
 ### 📦 Option 1: Run the Prebuilt Executable 
@@ -189,19 +199,24 @@ or manually install:
 Then you can run `App.py` for GUI interface or run `Bot.py` for cmd input without GUI.
 
 # Usage:
- 
-<div style="; border: 2px solid orange; padding: 10px; padding-bottom: 0px; border-radius: 5px; margin-bottom: 10px;">
+
+<p align="center"> <img src="ImageAssets/readme/6.png"></p>
+
+
+<!-- <div style="; border: 2px solid orange; padding: 10px; padding-bottom: 0px; border-radius: 5px; margin-bottom: 10px;">
   <strong>Game interface must be in English!</strong><br>
   <strong>Make sure that the Limbus Company window is fully visible!</strong><br>
   <p>Set the in-game resolution to <strong>16:9</strong> ratio (<strong>1920x1080</strong> is best, but <strong>1280x720</strong> also works)</p>
-</div>
+</div> -->
 
 - You can set up sinners and other settings upon program execution. ChargeGrinder will start running in 10 seconds after that. 
 - In the meantime you should switch to the Limbus Company window. It is not recommended to move the mouse while the bot is running, but you can Alt+Tab to another window and the bot will pause.
 
 # Recommended Graphics Settings:
 
-<div style="overflow: auto; margin-bottom: 20px;">
+<p align="center"> <img src="ImageAssets/readme/7.png"> </p>
+
+<!-- <div style="overflow: auto; margin-bottom: 20px;">
 <img style="float: left; margin-left: 0px; margin-right: 40px; " src="ImageAssets/readme/fullscreen.png" width="500px" />
 
 <h3 style="margin-top: 0px;">1920x1080</h3>
@@ -218,15 +233,17 @@ Then you can run `App.py` for GUI interface or run `Bot.py` for cmd input withou
 
   - The resolution I usually test new versions with (and mostly use)
   - Use windowed mode only
-</div>
+</div> -->
 
 # Run stats
 
-<div style="overflow: auto; margin-bottom: 20px;">
+<img src="ImageAssets/readme/8.png">
+
+<!-- <div style="overflow: auto; margin-bottom: 20px;">
 <img style="float: left; margin-left: 0px; margin-right: 40px;" src="ImageAssets/readme/export.png" width="120px" />
 
 <h3 style="margin-top: 12px;">You can export run data from game.log file to game.csv</h3>
-</div>
+</div> -->
 
 ### Example game.csv:
 | NORMAL     | BURN |
