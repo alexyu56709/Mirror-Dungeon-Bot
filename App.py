@@ -512,8 +512,6 @@ class MyApp(QWidget):
         self.is_lux = False
         self.count_exp = 1
         self.count_thd = 3
-        
-        self.set_priority()
 
         self.sinner_selections = {i: sm.get_team(i) for i in range(10)}
         self.affinity_lux = self._day()
@@ -610,7 +608,6 @@ class MyApp(QWidget):
 
         self.combo_boxes = []
         self.selectize_widgets = []
-        self.set_widgets()
 
         self.hard_conf = QLabel(self.config)
         self.hard_conf.setPixmap(QPixmap(Bot.APP_PTH["hard_conf"]))
@@ -1008,6 +1005,9 @@ class MyApp(QWidget):
         self.check_version()
 
         self.set_affinity()
+        self.priority_team.setPixmap(QPixmap(Bot.APP_PTH[f'team{self.affinity}']))
+        self.set_priority()
+        self.set_widgets()
         self.set_selected_buttons(self.sinner_selections[self.affinity])
         self.set_buttons_active(sm.get_config(8))
         self.overlay.raise_()

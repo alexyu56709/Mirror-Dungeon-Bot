@@ -34,6 +34,7 @@ def event():
                 win_click(gui.center(egos[0]), delay=0)
 
         now_click.button("Proceed")
+        now_click.button("CommenceBattle")
 
         if now.button("check"):
             matches = {

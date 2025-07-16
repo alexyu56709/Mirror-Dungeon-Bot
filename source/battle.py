@@ -152,7 +152,7 @@ def select_team():
         time.sleep(1)
 
     for i in range(4):
-        coords = [gui.center(box) for box in LocateGray.locate_all(PTH[f"{affinity}_team"], region=REG["teams"], threshold=7, conf=0.85)]
+        coords = [gui.center(box) for box in LocateGray.locate_all(PTH[f"{affinity}_team"], region=REG["teams"], threshold=7, conf=0.83)]
         sorted(coords, key=lambda coord: coord[1])
 
         if coords:

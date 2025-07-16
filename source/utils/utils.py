@@ -802,7 +802,7 @@ def chain_actions(preset: LocatePreset, actions: list):
 def handle_fuckup():
     if gui.getActiveWindowTitle() == 'LimbusCompany':
         set_window()
-        win_moveTo(1509, 978)
+        win_click(1888, 901)
         gui.press("Esc")
         gui.press("Esc")
         if loc.button("forfeit", wait=1):

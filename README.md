@@ -158,8 +158,8 @@ This tool does not modify or access any game files and relies solely on the disp
 
 # Installation
 ### 📦 Option 1: Run the Prebuilt Executable 
-[![Download](https://img.shields.io/badge/app.exe-Download-blue.svg)](https://github.com/AlexWalp/Mirror-Dungeon-Bot/releases/latest/download/app.exe) <p>
-- Launch **app.exe** from the latest release - no additional files required.
+[![Download](https://img.shields.io/badge/app.exe-Download-blue.svg?style=for-the-badge)](https://github.com/AlexWalp/Mirror-Dungeon-Bot/releases/latest/download/app.exe) <p>
+- Launch **app.exe** from [the latest release](https://github.com/AlexWalp/Mirror-Dungeon-Bot/releases/latest) - no additional files required.
 - No OCR is used anymore, all detection is now done with open cv.
 
 ### 🐍 Option 2: Run with Python

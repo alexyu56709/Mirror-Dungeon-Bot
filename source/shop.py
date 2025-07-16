@@ -522,6 +522,7 @@ def shop(level):
                 for gift in p.GIFTS["uptie1"]:
                     enhance(gift)
                 Action("power", click=(750, 873), ver=p.SUPER).execute(click)
+                time.sleep(0.3)
                 buy_loop({3: 2}, skip=0, uptie=False)
             except RuntimeError:
                 handle_fuckup()
