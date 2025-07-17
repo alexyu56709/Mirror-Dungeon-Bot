@@ -38,10 +38,14 @@ def get_gift(image, owned_x):
             point = ego_aff[1]
             win_click(point)
             return rectangle(image, (int(point[0]-100), 0), (int(point[0]+100), 110), (0, 0, 0), -1)
-        elif coord := LocateRGB.locate(PTH[f"tier{lvl}"], image=image, region=REG["EGO"], method=cv2.TM_SQDIFF_NORMED):
-            point = gui.center(coord)
+        elif boxes := LocateRGB.locate_all(PTH[f"tier{lvl}"], image=image, region=REG["EGO"], method=cv2.TM_SQDIFF_NORMED, threshold=30):
+            for box in boxes:
+                point = gui.center(box)
+                if far_from_owned(point, owned_x):
+                    break
             win_click(point)
             return rectangle(image, (int(point[0]-100), 0), (int(point[0]+100), 110), (0, 0, 0), -1)
+
 
 def grab_EGO():
     if not now.button("EGObin"): return False

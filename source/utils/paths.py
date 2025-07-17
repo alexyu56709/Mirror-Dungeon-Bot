@@ -174,7 +174,7 @@ FLOORS = {
         'MiracleinDistrict20', 'TheNoonofViolet', 'FullStoppedbyaBullet', 'TearfulThings',
         'CrawlingAbyss', 'ACertainWorld', 'toClaimTheirBones', 'TimekillingTime',
         'MurderontheWARPExpress', 'RepressedWrath', 'AddictingLust', 'TreadwheelSloth',
-        'DevouredGluttony', 'DegradedGloom', 'VainPride', 'InsignificantEnvy'
+        'DevouredGluttony', 'DegradedGloom', 'VainPride', 'InsignificantEnvy', 'HatredandDespair'
     ],
     5: [
         'TearfulThings', 'CrawlingAbyss', 'ACertainWorld', 'toClaimTheirBones',
@@ -210,7 +210,7 @@ HARD_FLOORS = {
         'AddictingLust', 'TreadwheelSloth', 'DevouredGluttony', 'DegradedGloom', 'VainPride', 
         'InsignificantEnvy', 'SlicersDicers', 'PiercersPenetrators', 'CrushersBreakers',
         'RisingPowerSupply', 'DeepSigh', 'SinkingPang', 'CrushingExternalForce', 'DizzyingWaves',
-        'TrickledSanguineBlood', 'BurningHaze'
+        'TrickledSanguineBlood', 'BurningHaze', 'HatredandDespair'
     ],
     4: [
         'TearfulThings', 'CrawlingAbyss', 'ACertainWorld', 'toClaimTheirBones', 'TimekillingTime', 
@@ -236,7 +236,7 @@ HARD_BANNED = [
     "NocturnalSweeping", 'Line4', 'Line3', 'toClaimTheirBonesBokGak', 'TheEvilDefining', 
     'SinkingDeluge', 'PoisedBreathing', 'InertSloth', 'EmotionalFlood', 'CrawlingAbyss', 
     'TreadwheelSloth', 'VainPride', 'PitifulEnvy', 'TyrannicalPride', 'UnrelentingMight', 
-    'Line5', 'TheSurrenderedWitnessing', 'TheDreamEnding'
+    'Line5', 'TheSurrenderedWitnessing', 'TheDreamEnding', 'HatredandDespair'
 ]
 
 
