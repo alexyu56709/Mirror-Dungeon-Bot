@@ -1,6 +1,6 @@
 import threading
 
-V = "2.1.2"
+V = "2.1.0"
 
 SELECTED = ["YISANG", "DONQUIXOTE" , "ISHMAEL", "RODION", "SINCLAIR", "GREGOR"]
 GIFTS = dict()
@@ -15,10 +15,10 @@ HARD = False
 APP = None
 
 PICK = {
-    'floor1': ['TheOutcast'], 
+    'floor1': ['NagelundHammer'], 
     'floor2': ['HellsChicken'], 
     'floor3': [], 
-    'floor4': [], 
+    'floor4': ['HatredandDespair'], 
     'floor5': ['LCBRegularCheckup']
 }
 
@@ -26,8 +26,8 @@ IGNORE = {
     'floor1': ['AutomatedFactory', 'TheUnloving', 'FaithErosion'], 
     'floor2': ['AutomatedFactory', 'TheUnloving', 'FaithErosion', 'TobeCrushed'], 
     'floor3': ['TobeCrushed'], 
-    'floor4': ['TheNoonofViolet', 'MurderontheWARPExpress', 'FullStoppedbyaBullet', 'VainPride', 'CrawlingAbyss', 'TimekillingTime', 'toClaimTheirBones'], 
-    'floor5': ['MurderontheWARPExpress', 'VainPride', 'CrawlingAbyss', 'TimekillingTime', 'NocturnalSweeping', 'toClaimTheirBones']
+    'floor4': ['TheNoonofViolet', 'MurderontheWARPExpress', 'FullStoppedbyaBullet', 'VainPride', 'CrawlingAbyss', 'TimekillingTime', 'toClaimTheirBones','TearfulThings','InsignificantEnvy','RepressedWrath'], 
+    'floor5': ['MurderontheWARPExpress', 'VainPride', 'CrawlingAbyss', 'TimekillingTime', 'NocturnalSweeping', 'toClaimTheirBones','TearfulThings','InsignificantEnvy','CrushersBreakers','RepressedWrath']
 }
 
 WARNING = None

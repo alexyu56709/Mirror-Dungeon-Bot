@@ -75,7 +75,6 @@ REG = {
     "Proceed"        : (1539,  906,  316,  126),
     "Commence"       : (1539,  906,  316,  126),
     "Continue"       : (1539,  906,  316,  126),
-    "CommenceBattle" : (1539,  906,  316,  126),
     "probs"          : (  42,  876, 1427,   74),
 
     # grab.py
@@ -188,7 +187,7 @@ FLOORS = {
 BANNED = [
     "AutomatedFactory", "TheUnloving", "FaithErosion", "TobeCrushed", "TheNoonofViolet", 
     "MurderontheWARPExpress", "FullStoppedbyaBullet", "VainPride", "CrawlingAbyss", "TimekillingTime", 
-    "NocturnalSweeping", "toClaimTheirBones"
+    "NocturnalSweeping", "toClaimTheirBones", "TearfulThings","InsignificantEnvy","CrushersBreakers","RepressedWrath"
 ]
 
 

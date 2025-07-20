@@ -2,10 +2,10 @@
 TEAMS = {
     "BURN": {
         "checks" : ["Burn", "smallBurn", "BurnStart", "reBurn", "bigBurn"],
-        "floor1" : ["TheOutcast"],
+        "floor1" : ["NagelundHammer"],
         "floor2" : ["HellsChicken"],
-        "floor3" : [],
-        "floor4" : [],
+        "floor3" : ["TobePierced"],
+        "floor4" : ["HatredandDespair"],
         "floor5" : ["LCBRegularCheckup"],
         "uptie1" : ["hellterfly", "fiery"],
         "uptie2" : "glimpse",
