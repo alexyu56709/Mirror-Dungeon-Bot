@@ -11,15 +11,15 @@ def within_region(x, regions):
 
 
 def pack_eval(level, regions, skip):
-    
+    #print(f"Skip1: {skip}")
     # best packs
     priority = p.PICK[f"floor{level}"]
-    print(priority)
+    print(f"Pick: {priority}")
     logging.info(f"Pick: {priority}")
 
     # worst packs (suboptimal time)
     banned = p.IGNORE[f"floor{level}"]
-    print(banned)
+    print(f"Ignore: {banned}")
     logging.info(f"Ignore: {banned}")
 
     if p.HARD:
@@ -29,6 +29,7 @@ def pack_eval(level, regions, skip):
 
     packs = dict()
 
+    #Identify packs
     attempts = 2
     while len(packs.keys()) < len(regions) and attempts > 0:
         sift = SIFTMatcher(region=(161, 630, 1632, 100), nfeatures=2000, contrastThreshold=0)
@@ -46,22 +47,26 @@ def pack_eval(level, regions, skip):
         for pack, x in packs.items() 
         if (region_id := within_region(x, regions)) is not None
     }
-    logging.info(packs)
-    print(packs)
-        
-    if priority: # picking best pack
+    logging.info(f"Pack List: {packs}")
+    print(f"Pack List: {packs}")
+    #print(f"Skip2: {skip}")
+
+    #Picking best pack
+    if priority: 
         for pr in priority:
             if pr in packs.keys():
                 print(f"Entering {pr}")
                 logging.info(f"Pack: {pr}")
                 return packs[pr]
-    if level < 3 and skip != 3 and priority:
+    if skip != 3 and priority:
         return None
     
     # removing S.H.I.T. packs
     filtered = {pack: i for pack, i in packs.items() if pack not in banned}
 
     if not filtered and skip != 3: # if all packs are S.H.I.T.
+        print("sht check")
+        logging.info("sht check")        
         return None
     elif not filtered:
         print("May Ayin save us all!") # we have to pick S.H.I.T. 
@@ -84,11 +89,12 @@ def pack_eval(level, regions, skip):
         index = within_region(coord[0], new_regions)
         if index is not None:
             weight[ids[index]] += 1
-
+            
+    #print(f"Skip3: {skip}")    
     id = max(weight, key=weight.get)
     name = next((pack for pack, i in filtered.items() if i == id), None)
     print(f"Entering {name}")
-    logging.info(f"Pack: {name}")
+    logging.info(f"Entering: {name}")
     return id
 
 
@@ -152,6 +158,8 @@ def pack(level):
             win_dragTo(x, y + 300, duration=0.5, button="left")
             break
         if skip != 3:
+            print("Rerolling pack")
+            logging.info("Rerolling pack")            
             win_click(1617, 62)
             win_moveTo(1721, 999)
             time.sleep(2)
