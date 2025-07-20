@@ -152,7 +152,7 @@ def select_team():
         time.sleep(1)
 
     for i in range(4):
-        coords = [gui.center(box) for box in LocateGray.locate_all(PTH[f"{affinity}_team"], region=REG["teams"], threshold=7, conf=0.83)]
+        coords = [gui.center(box) for box in LocateGray.locate_all(PTH[f"{affinity}_team"], region=REG["teams"], threshold=7, conf=0.85)]
         sorted(coords, key=lambda coord: coord[1])
 
         if coords:
@@ -253,7 +253,7 @@ def fight(lux=False):
         if lux: select_team()
         select(p.SELECTED)
 
-    print("Entered Battle")
+    #print("Entered Battle")
     last_error = 0
     while True:
         ck = False
@@ -286,8 +286,8 @@ def fight(lux=False):
         for i in exit_if:
             if now.button(i):
                 if i == "loading": loading_halt()
-                print("Battle is over")
-                logging.info("Battle is over")
+                #print("Battle is over")
+                #logging.info("Battle is over")
                 return True
         
         if gui.getActiveWindowTitle() != 'LimbusCompany':
