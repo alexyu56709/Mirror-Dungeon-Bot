@@ -2,8 +2,6 @@ import sys, os, datetime, json, hashlib
 import source.utils.params as p
 import Bot
 
-from stats import log_to_csv
-
 os.environ['QT_LOGGING_RULES'] = 'qt.qpa.*=false'
 
 from PyQt6.QtWidgets import QApplication, QWidget, QPushButton, QLineEdit, QLabel, QGraphicsOpacityEffect, QMessageBox, QLayout, QHBoxLayout, QVBoxLayout, QScrollArea, QComboBox
