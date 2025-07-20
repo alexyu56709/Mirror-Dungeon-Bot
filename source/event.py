@@ -16,8 +16,14 @@ def event():
         
         if now.button("choices"):
             time.sleep(0.1)
+            #Hard code chicken event
+            nothing_boxes = LocateGray.locate_all(PTH["Nothing2"], region=REG["textEGO"])
+            if nothing_boxes:
+                win_click(gui.center(nothing_boxes[0]))
+                print("Hard coded ckn event")
+                continue
             egos = LocateGray.locate_all(PTH["textEGO"], region=REG["textEGO"], conf=0.85)
-            print(egos)
+            #print(egos)
             if not egos:
                 choice = random.choice([316, 520])
                 win_click(1348, choice, delay=0)
@@ -34,7 +40,6 @@ def event():
                 win_click(gui.center(egos[0]), delay=0)
 
         now_click.button("Proceed")
-        now_click.button("CommenceBattle")
 
         if now.button("check"):
             matches = {
