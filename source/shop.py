@@ -13,8 +13,6 @@ EXTRA = []
 for i in range(3, 6):
     EXTRA += list(combinations_with_replacement(range(1, 5), i))
 
-
-
 fusion_ranges = {
     1: (9, 10),
     2: (11, 16),
@@ -182,9 +180,11 @@ def get_inventory():
         time.sleep(0.4)
     return coords, have
 
+
 def buy_some(rerolls=1, priority=False):
+    free_roll = False
     time.sleep(0.2)
-    iterations = rerolls + 1
+    iterations = rerolls + 2
     for i in range(iterations):
         if not priority: # just by same affinity
             box = True
@@ -207,7 +207,15 @@ def buy_some(rerolls=1, priority=False):
                 except gui.ImageNotFoundException:
                     continue
 
-        if rerolls and balance(200):
+        if not free_roll:
+            rerolls -= 1
+            win_click(1489, 177)
+            connection()
+            free_roll = True
+            #print(f"free_roll {free_roll}")
+            #logging.info(f"free_roll {free_roll}")
+
+        if rerolls and balance(200) and free_roll:
             rerolls -= 1
             Action(p.SUPER, click=(1715, 176), ver="keywordRef").execute(shop_click)
             wait_for_condition(
@@ -234,15 +242,26 @@ def sell():
         Action("sell", click=(750, 879), ver=p.SUPER).execute(click)
         return False # nothing to sell
 
+enhance_glimpse = False
+
 def enhance_special():
+    global enhance_glimpse
+    print("TIME TO ENHANCE GLIMPSE")
+    logging.info("TIME TO ENHANCE GLIMPSE")
     Action("fuse", click=(750, 873), ver=p.SUPER).execute(click) # close fusing
     while True:
         if balance(300):
             Action(p.SUPER, click=(250, 581), ver="power").execute(click)
             enhance(p.GIFTS["uptie2"]) # enhance special
             Action("power", click=(750, 873), ver=p.SUPER).execute(click)
+            enhance_glimpse = True
+            print("GLIMPSE ENHANCED")
+            logging.info("GLIMPSE ENHANCED")
             break
-        elif not sell(): break
+        elif not sell(): 
+            print("No money for glimpse enhance")
+            logging.info("No money for glimpse enhance")
+            break
     init_fuse() # back to fusing
 
 
@@ -276,12 +295,14 @@ def perform_clicks(to_click):
     ])
     to_click.clear()
 
+is_special = False
 
 def fuse():
+    global is_special
+    global enhance_glimpse
     time.sleep(0.2)
     coords, have = get_inventory()
     to_click = []
-    is_special = False
     fuse_type = 0
 
     # try: # getting rid of useless stone ego gift I hate
@@ -298,6 +319,9 @@ def fuse():
         if loc_shop.button(p.GIFTS["uptie2"], "fuse_shelf", wait=0.2):
             p.AGRESSIVE_FUSING = False
             is_special = True
+            print(f"is_special = true {is_special}")
+            logging.info(f"is_special = true {is_special}")
+            
     else:
         if p.AGRESSIVE_FUSING: p.AGRESSIVE_FUSING = False
 
@@ -325,7 +349,12 @@ def fuse():
             to_click.append(have[name])
         perform_clicks(to_click)
 
-    if is_special: enhance_special()
+    print(f"is_special {is_special}")
+    logging.info(f"is_special {is_special}")
+    print(f"enhance_glimpse {enhance_glimpse}")
+    logging.info(f"enhance_glimpse {enhance_glimpse}")
+
+    if is_special and not enhance_glimpse: enhance_special()
     return None
 
 
@@ -441,6 +470,7 @@ def buy(missing):
         try:
             res = loc_shop.try_find(gift, "buy_shelf", image=shop_shelf, comp=0.75, conf=0.7)
             print(f"got {gift}")
+            logging.info(f"got {gift}")
             win_click(res)
             conf_gift()
             output = True
@@ -453,7 +483,8 @@ def buy(missing):
     for tier in sorted(missing.keys(), reverse=True):
         for _ in range(missing[tier]):
             have = get_shop(shop_shelf)
-            print(f"got {have}")
+            #print(f"got {have}")
+            #logging.info(f"got {have}")
             if have[tier]:
                 win_click(have[tier][0])
                 conf_gift()
@@ -469,11 +500,10 @@ def buy_loop(missing, skip, uptie=True):
     if not result or not uptie:
         try: 
             if skip < 1 and balance(200):
-                Action(p.SUPER, click=(1715, 176), ver="keywordRef").execute(shop_click)
-                wait_for_condition(
-                    condition=lambda: now.button("keywordRef") and not now.button("connecting"), 
-                    action=confirm_affinity
-                )
+                result, missing = buy(missing)
+                win_click(1489, 177) # free reroll
+                #print(f"free_roll2")
+                #logging.info(f"free_roll2")
                 connection()
                 skip += 1
 
@@ -482,7 +512,11 @@ def buy_loop(missing, skip, uptie=True):
             print("no cash, sorry")
 
         if skip < 2 and balance(200):
-            win_click(1489, 177) # free reroll
+            Action(p.SUPER, click=(1715, 176), ver="keywordRef").execute(shop_click)
+            wait_for_condition(
+                condition=lambda: now.button("keywordRef") and not now.button("connecting"), 
+                action=confirm_affinity
+            )
             connection()
 
             skip += 1
@@ -522,7 +556,6 @@ def shop(level):
                 for gift in p.GIFTS["uptie1"]:
                     enhance(gift)
                 Action("power", click=(750, 873), ver=p.SUPER).execute(click)
-                time.sleep(0.3)
                 buy_loop({3: 2}, skip=0, uptie=False)
             except RuntimeError:
                 handle_fuckup()
@@ -531,7 +564,6 @@ def shop(level):
             level = 2
             Action("power", click=(750, 873), ver=p.SUPER).execute(click)
     if 5 > level > 1 or (not p.SKIP and level == 5):
-        buy_some(rerolls=0, priority=True)
         fuse_loop()
     
     time.sleep(0.1)
