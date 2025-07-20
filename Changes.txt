@@ -1,0 +1,14 @@
+Config Changes:
+Changed Pack Prioritization for Burn team
+Disabled and added some debug messages
+Disabled restriction on choosing priority packs after floor 3
+
+Fixes/Optimizations
+Added hard coded option select for Hell's Chicken event "Tango of Poultry Passion" to choose "Tango Marinade" instead of "Contaminated Needle & Thread"
+Changed to scan initial shop inventory and use free reroll before keyword search
+Reverted stats.py to previous version as new one doesn't work
+Fixed Tier 4 ego gift 'uptie2' not being enhanced unless right after obtaining it
+
+To do features:
+Add button "ESC" to pause bot
+Prioritize Tier 4 stone ego gift for reroll on the fuse
