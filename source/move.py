@@ -248,7 +248,7 @@ def move():
 
             if depth == 0 and level == 1 and is_boss(region, comp):
                 enter()
-                logging.info("Entering Boss fight")
+                #logging.info("Entering Boss fight")
                 return True
 
             elif now_rgb.button("coin", region, conf=0.9, comp=comp):
@@ -273,7 +273,7 @@ def move():
             elif depth == 0 and is_shop(_loc, region):
                 win_click(gui.center(srch_regions[level]))
                 enter()
-                logging.info("Entering Shop")
+                #logging.info("Entering Shop")
                 return True
         if not any(nodes[depth]):
             if depth != 0: nodes = nodes[:depth]
@@ -285,7 +285,7 @@ def move():
         if not id is None:
             win_click(gui.center(regions[id]))
             enter()
-            logging.info(f"Entering {name} {'fight'*(name!='Event')}")
+            #logging.info(f"Entering {name} {'fight'*(name!='Event')}")
             return True
 
     # if we fail
