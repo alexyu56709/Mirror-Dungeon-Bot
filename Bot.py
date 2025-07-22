@@ -77,6 +77,7 @@ def dungeon_start():
         if failed > 5:
             print("Initialization error")
             logging.error("Initialization error")
+            logging.info('\n')
             break
     print("Entering MD!")
 
@@ -128,6 +129,7 @@ def dungeon_end():
     except RuntimeError:
         print("Termination error")
         logging.error("Termination error")
+        logging.info('\n')
     print("MD Finished!")
 
 # FAIL RUN
@@ -149,6 +151,7 @@ def dungeon_fail():
     except RuntimeError:
         print("Termination error")
         logging.error("Termination error")
+        logging.info('\n')
     print("MD Failed!")
 
 
@@ -171,6 +174,7 @@ def main_loop():
             time.sleep(10)
             if now_click.button("ServerError"):
                 logging.error('Server error happened')
+                logging.info('\n')
 
         if now.button("EventEffect"):
             win_click(773, 521)
@@ -186,11 +190,13 @@ def main_loop():
         
         if now.button("victory"):
             logging.info('Run Completed')
+            logging.info('\n')
             dungeon_end()
             return True
 
         if now.button("defeat"):
             logging.info('Run Failed')
+            logging.info('\n')
             dungeon_fail()
             return False
 
