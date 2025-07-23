@@ -8,6 +8,9 @@ Added hard coded option select for Hell's Chicken event "Tango of Poultry Passio
 Changed to scan initial shop inventory and use free reroll before keyword search
 Reverted stats.py to previous version as new one doesn't work
 Fixed Tier 4 ego gift 'uptie2' not being enhanced unless right after obtaining it
+Fixed Tier 4 ego gift 'uptie2' only being enhanced for the first run
+
+Needs Fixing:
 
 To do features:
 Add button "ESC" to pause bot
