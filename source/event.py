@@ -16,11 +16,17 @@ def event():
         
         if now.button("choices"):
             time.sleep(0.1)
-            #Hard code chicken event
+            #Hard coded chicken event
             nothing_boxes = LocateGray.locate_all(PTH["Nothing2"], region=REG["textEGO"])
             if nothing_boxes:
                 win_click(gui.center(nothing_boxes[0]))
                 print("Hard coded ckn event")
+                continue
+            #Hard coded Bizarre Machine event
+            nothing_boxes = LocateGray.locate_all(PTH["Coin"], region=REG["textEGO"])
+            if nothing_boxes:
+                win_click(gui.center(nothing_boxes[0]))
+                print("Hard coded Bizarre Machine event")
                 continue
             egos = LocateGray.locate_all(PTH["textEGO"], region=REG["textEGO"], conf=0.85)
             #print(egos)
