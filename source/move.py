@@ -9,7 +9,7 @@ def find_danteh(): # looks for high resolution Dante
     for i in range(2):
         try:
             Danteh = LocateRGB.try_locate(PTH[f"Danteh{i}"])
-            print("Danteh found")
+            #print("Danteh found")
             x, y = gui.center(Danteh)
             return x, y
         except:
@@ -20,7 +20,7 @@ def find_danteh(): # looks for high resolution Dante
 def find_bus(): # looks for low resolution Dante
     try:
         Bus = LocateRGB.try_locate(PTH["Bus"])
-        print("Danteh found")
+        #print("Danteh found")
         x, y = gui.center(Bus)
         return x, y
     except:
@@ -235,7 +235,7 @@ def move():
         position((429, 480), shift=adjust)
 
     inter_connect = get_connections()
-    print(inter_connect)
+    #print(inter_connect)
     nodes = [[None, None, None] for _ in range(3)]
 
     for depth in range(3):
@@ -279,9 +279,9 @@ def move():
             if depth != 0: nodes = nodes[:depth]
             break
     if any(nodes[0]):
-        print(nodes)
+        #print(nodes)
         id, name = next_step(nodes, inter_connect)
-        print(id)
+        #print(id)
         if not id is None:
             win_click(gui.center(regions[id]))
             enter()
