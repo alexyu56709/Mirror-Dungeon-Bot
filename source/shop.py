@@ -128,7 +128,8 @@ def inventory_check(reg, h):
         try:
             template = amplify(cv2.imread(PTH[gift]))
             x, y = gui.center(LocateRGB.try_locate(template, image=image, region=reg, conf=0.88))
-            print(f"got {gift}")
+            print(f"Have {gift}")
+            logging.info(f"Have {gift}")
             have[gift] = (x, y, h)
             fuse_shelf = rectangle(fuse_shelf, (int(x - 62 - reg[0]), int(y - 72 - reg[1])), (int(x + 60 - reg[0]), int(y + 60 - reg[1])), (0, 0, 0), -1)
         except gui.ImageNotFoundException:
@@ -200,7 +201,8 @@ def buy_some(rerolls=1, priority=False):
             for gift in p.GIFTS["buy"]:
                 try:
                     res = loc_shop.try_find(gift, "buy_shelf", image=shop_shelf, comp=0.75, conf=0.7)
-                    print(f"got {gift}")
+                    print(f"Got {gift}")
+                    logging.info(f"Got {gift}")
                     win_click(res)
                     conf_gift()
                     shop_shelf = update_shelf()
@@ -469,8 +471,8 @@ def buy(missing):
     for gift in p.GIFTS["buy"]:
         try:
             res = loc_shop.try_find(gift, "buy_shelf", image=shop_shelf, comp=0.75, conf=0.7)
-            print(f"got {gift}")
-            logging.info(f"got {gift}")
+            print(f"Got {gift}")
+            logging.info(f"Got {gift}")
             win_click(res)
             conf_gift()
             output = True
@@ -542,6 +544,7 @@ def leave():
 
 
 def shop(level):
+    global enhance_glimpse
     if now.button("shop"): p.SUPER = "shop"
     elif not p.HARD or not now.button("supershop"): return False
     else: p.SUPER = "supershop"
@@ -565,7 +568,8 @@ def shop(level):
             Action("power", click=(750, 873), ver=p.SUPER).execute(click)
     if 5 > level > 1 or (not p.SKIP and level == 5):
         fuse_loop()
-    
+    if level == 5:
+        enhance_glimpse = False
     time.sleep(0.1)
     leave()
     return True
