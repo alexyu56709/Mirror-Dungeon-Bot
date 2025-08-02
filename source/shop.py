@@ -545,6 +545,7 @@ def leave():
 
 def shop(level):
     global enhance_glimpse
+    global is_special
     if now.button("shop"): p.SUPER = "shop"
     elif not p.HARD or not now.button("supershop"): return False
     else: p.SUPER = "supershop"
