@@ -570,6 +570,7 @@ def shop(level):
         fuse_loop()
     if level == 5:
         enhance_glimpse = False
+        is_special = False
     time.sleep(0.1)
     leave()
     return True

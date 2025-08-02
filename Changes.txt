@@ -10,6 +10,7 @@ Reverted stats.py to previous version as new one doesn't work
 Fixed Tier 4 ego gift 'uptie2' not being enhanced unless right after obtaining it
 Fixed Tier 4 ego gift 'uptie2' only being enhanced for the first run
 Added hard coded option select for "Bizarre Machine" event to choose "Insert coin" to try and get EX EGO Gift "Wealth" instead of skipping it
+Fixed Tier 4 ego gift 'uptie2' attemping to be enhanced immediately after the first run
 
 Needs Fixing:
 
