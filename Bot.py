@@ -190,7 +190,9 @@ def main_loop():
         
         if now.button("victory"):
             logging.info('Run Completed')
+            print('Run Completed')
             logging.info('\n')
+            print('\n')
             dungeon_end()
             return True
 
@@ -270,6 +272,7 @@ def replay_loop():
         if p.NETZACH: check_enkephalin()
 
         logging.info(f'Iteration {i}')
+        print(f'Iteration {i}')
         completed = False
         while not completed:
             completed = main_loop()
