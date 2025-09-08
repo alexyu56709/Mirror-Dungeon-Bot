@@ -105,8 +105,8 @@ def click_bonus():
 
 def handle_bonus():
     time.sleep(0.2)
-    if p.BONUS or now_rgb.button("bonus_off"): return
-    if p.HARD and now_rgb.button("bonus_off", "hardbonus"): return
+    if p.BONUS or now_rgb.button("bonus_off", conf=0.8): return
+    if p.HARD and now_rgb.button("bonus_off", "hardbonus", conf=0.8): return
     time.sleep(0.2)
     if not wait_for_condition(lambda: not click_bonus()):
         raise RuntimeError
