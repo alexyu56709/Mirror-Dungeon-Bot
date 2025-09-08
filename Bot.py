@@ -271,8 +271,8 @@ def replay_loop():
     for i in range(number):
         if p.NETZACH: check_enkephalin()
 
-        logging.info(f'Iteration {i}')
-        print(f'Iteration {i}')
+        logging.info(f'Iteration {i+1}')
+        print(f'Iteration {i+1}')
         completed = False
         while not completed:
             completed = main_loop()
@@ -354,7 +354,8 @@ def execute_me(is_lux, count, count_exp, count_thd, teams, avoid, log, bonus, re
             team = next(rotator)
             set_team(team, teams)
 
-            logging.info(f'Iteration {i}')
+            logging.info(f'Iteration {i+1}')
+            print(f'Iteration {i+1}')
             completed = False
             while not completed:
                 completed = main_loop()
