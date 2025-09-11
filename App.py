@@ -643,17 +643,27 @@ class MyApp(QWidget):
         # self.test.show()
 
     def set_priority(self):
+        def flatten(x):
+            out = []
+            for item in x:
+                if isinstance(item, list):
+                    out.extend(item)
+                else:
+                    out.append(item)
+            return out
+
         if sm.config_exists(self.affinity):
-            self.priority = sm.get_config(self.affinity)
+            self.priority = flatten(sm.get_config(self.affinity))
         else: 
             self.priority = self.get_priority(self.affinity)
-        
+
         if sm.config_exists(7):
-            self.avoid = sm.get_config(7)
+            self.avoid = flatten(sm.get_config(7))
         else:
             self.avoid = self.get_avoid()
 
         self.all = self.get_all()
+
 
     def set_widgets(self):
         for widget in self.config_widgets:
@@ -1090,11 +1100,18 @@ class MyApp(QWidget):
         else:
             self.sinner_selections[self.affinity]
 
-    def save_config(self):
-        sm.save_config(self.affinity, self.priority)
-        sm.save_config(7, self.avoid)
-        sm.save_config(8, self.get_config_buttons())
-        self.config.hide()
+    def save_config(self, key, value_list):
+        if self.config not in self.data:
+            self.data[self.config] = {}
+        # force a flat list before saving
+        flat = []
+        for item in value_list:
+            if isinstance(item, list):
+                flat.extend(item)
+            else:
+                flat.append(item)
+        self.data[self.config][str(key)] = flat
+        self.save_settings()
 
     def update_sinners(self):
         self.sinners = [button.config.get('id') for button in self.selected_button_order]
