@@ -156,7 +156,7 @@ def dungeon_fail():
 
 
 # MAIN LOOP
-def main_loop():
+def main_loop(i,number):
     dungeon_start()
     p.AGRESSIVE_FUSING = True
     error = 0
@@ -189,8 +189,8 @@ def main_loop():
             connection()
         
         if now.button("victory"):
-            logging.info('Run Completed')
-            print('Run Completed')
+            logging.info(f'Run {i+1} Completed')
+            print(f'Run {i+1} Completed')
             logging.info('\n')
             print('\n')
             dungeon_end()
@@ -203,7 +203,7 @@ def main_loop():
             return False
 
         try:
-            ck, level = pack(level)
+            ck, level = pack(level, i, number)
             ck += move()
             ck += fight()
             ck += event()
@@ -271,11 +271,11 @@ def replay_loop():
     for i in range(number):
         if p.NETZACH: check_enkephalin()
 
-        logging.info(f'Iteration {i+1}')
-        print(f'Iteration {i+1}')
+        logging.info(f'Iteration {i+1}/{number}')
+        print(f'Iteration {i+1}/{number}')
         completed = False
         while not completed:
-            completed = main_loop()
+            completed = main_loop(i,number)
 
 
 if __name__ == "__main__":
@@ -358,7 +358,7 @@ def execute_me(is_lux, count, count_exp, count_thd, teams, avoid, log, bonus, re
             print(f'Iteration {i+1}')
             completed = False
             while not completed:
-                completed = main_loop()
+                completed = main_loop(i,count)
             if p.NETZACH: check_enkephalin()
 
         if p.ALTF4:

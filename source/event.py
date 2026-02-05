@@ -23,19 +23,19 @@ def event():
                 print("Hard coded ckn event")
                 logging.info("Hard coded ckn event")
                 continue
-            #Hard coded Bizarre Machine event2
-            nothing_boxes = LocateGray.locate_all(PTH["Coin2"], region=REG["textEGO"])
-            if nothing_boxes:
-                win_click(gui.center(nothing_boxes[0]))
-                print("Hard coded Bizarre Machine event2")
-                logging.info("Hard coded Bizarre Machine event2")
-                continue
-            #Hard coded Bizarre Machine event
-            nothing_boxes = LocateGray.locate_all(PTH["Coin"], region=REG["textEGO"])
-            if nothing_boxes:
-                win_click(gui.center(nothing_boxes[0]))
+            #Hard coded Bizarre Machine event2-currently not working
+            coin_boxes = LocateGray.locate_all(PTH["Coin"], region=REG["textEGO"])
+            if coin_boxes:
+                win_click(gui.center(coin_boxes[0]))
                 print("Hard coded Bizarre Machine event")
                 logging.info("Hard coded Bizarre Machine event")
+                continue
+            #Hard coded Bizarre Machine event
+            coin3_boxes = LocateGray.locate_all(PTH["Coin3"], region=REG["textEGO"])
+            if coin3_boxes:
+                win_click(gui.center(coin3_boxes[0]))
+                print("Hard coded Bizarre Machine event3")
+                logging.info("Hard coded Bizarre Machine event3")
                 continue
             egos = LocateGray.locate_all(PTH["textEGO"], region=REG["textEGO"], conf=0.85)
             #print(egos)

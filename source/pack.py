@@ -70,7 +70,9 @@ def pack_eval(level, regions, skip):
         return None
     elif not filtered:
         print("May Ayin save us all!") # we have to pick S.H.I.T. 
-        return 0
+        logging.info("May Ayin save us all!") 
+        banned = ['VainPride'] # Absolutely never choose robot final pack
+        filtered = {pack: i for pack, i in packs.items() if pack not in banned}
 
     # locating relevant ego gifts in floor rewards
     ego_coords = [gui.center(box) for box in LocateRGB.locate_all(PTH[p.GIFTS["checks"][1]])]
@@ -98,7 +100,7 @@ def pack_eval(level, regions, skip):
     return id
 
 
-def pack(level):
+def pack(level, iteration, number):
     if not now.button("PackChoice"):
         return (False, level)
     
@@ -113,8 +115,10 @@ def pack(level):
             level = i
             break
 
+    print(f'Iteration {iteration+1}/{number}')
     print(f"Entering Floor {level}")
-    logging.info(f"Floor {level}")
+    logging.info(f'Iteration {iteration+1}/{number}')
+    logging.info(f"Entering Floor {level}")
 
     win_moveTo(1721, 999)
     time.sleep(0.4)

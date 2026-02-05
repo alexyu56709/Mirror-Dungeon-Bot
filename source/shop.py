@@ -128,8 +128,8 @@ def inventory_check(reg, h):
         try:
             template = amplify(cv2.imread(PTH[gift]))
             x, y = gui.center(LocateRGB.try_locate(template, image=image, region=reg, conf=0.88))
-            print(f"Have {gift}")
-            logging.info(f"Have {gift}")
+            #print(f"Have {gift}")
+            #logging.info(f"Have {gift}")
             have[gift] = (x, y, h)
             fuse_shelf = rectangle(fuse_shelf, (int(x - 62 - reg[0]), int(y - 72 - reg[1])), (int(x + 60 - reg[0]), int(y + 60 - reg[1])), (0, 0, 0), -1)
         except gui.ImageNotFoundException:
@@ -209,14 +209,6 @@ def buy_some(rerolls=1, priority=False):
                 except gui.ImageNotFoundException:
                     continue
 
-        if not free_roll:
-            rerolls -= 1
-            win_click(1489, 177)
-            connection()
-            free_roll = True
-            #print(f"free_roll {free_roll}")
-            #logging.info(f"free_roll {free_roll}")
-
         if rerolls and balance(200) and free_roll:
             rerolls -= 1
             Action(p.SUPER, click=(1715, 176), ver="keywordRef").execute(shop_click)
@@ -225,6 +217,14 @@ def buy_some(rerolls=1, priority=False):
                 action=confirm_affinity
             )
             connection() 
+            
+        if not free_roll:
+            rerolls -= 1
+            win_click(1489, 177)
+            connection()
+            free_roll = True
+            #print(f"free_roll {free_roll}")
+            #logging.info(f"free_roll {free_roll}")
 
 
 def sell():
@@ -497,7 +497,7 @@ def buy(missing):
     return True, {} # got everything
 
 def buy_loop(missing, skip, uptie=True):
-    print("need", missing)
+    #print("need", missing)
     result, missing = buy(missing)
     if not result or not uptie:
         try: 
